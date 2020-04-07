@@ -1,0 +1,8 @@
+{
+  "appId": "com.devutex.example",
+  "appName": "example",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {}
+}
