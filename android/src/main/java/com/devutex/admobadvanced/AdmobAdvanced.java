@@ -1,4 +1,4 @@
-package com.devutex.capacitor-admob-advanced;
+package com.devutex.admobadvanced;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.NativePlugin;
@@ -7,7 +7,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 
 @NativePlugin()
-public class AdMobAdvanced extends Plugin {
+public class AdmobAdvanced extends Plugin {
 
     @PluginMethod()
     public void echo(PluginCall call) {

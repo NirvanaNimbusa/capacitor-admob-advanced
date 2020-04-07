@@ -1,5 +1,5 @@
 {
-  "appId": "com.devutex.example",
+  "appId": "io.ionic.starter",
   "appName": "example",
   "bundledWebRuntime": false,
   "npmClient": "npm",

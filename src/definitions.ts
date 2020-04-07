@@ -1,9 +1,9 @@
 declare module "@capacitor/core" {
   interface PluginRegistry {
-    AdMobAdvanced: AdMobAdvancedPlugin;
+    AdmobAdvanced: AdmobAdvancedPlugin;
   }
 }
 
-export interface AdMobAdvancedPlugin {
+export interface AdmobAdvancedPlugin {
   echo(options: { value: string }): Promise<{value: string}>;
 }

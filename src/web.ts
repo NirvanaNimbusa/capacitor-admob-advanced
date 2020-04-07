@@ -1,10 +1,10 @@
 import { WebPlugin } from '@capacitor/core';
-import { AdMobAdvancedPlugin } from './definitions';
+import { AdmobAdvancedPlugin } from './definitions';
 
-export class AdMobAdvancedWeb extends WebPlugin implements AdMobAdvancedPlugin {
+export class AdmobAdvancedWeb extends WebPlugin implements AdmobAdvancedPlugin {
   constructor() {
     super({
-      name: 'AdMobAdvanced',
+      name: 'AdmobAdvanced',
       platforms: ['web']
     });
   }
@@ -15,9 +15,9 @@ export class AdMobAdvancedWeb extends WebPlugin implements AdMobAdvancedPlugin {
   }
 }
 
-const AdMobAdvanced = new AdMobAdvancedWeb();
+const AdmobAdvanced = new AdmobAdvancedWeb();
 
-export { AdMobAdvanced };
+export { AdmobAdvanced };
 
 import { registerWebPlugin } from '@capacitor/core';
-registerWebPlugin(AdMobAdvanced);
+registerWebPlugin(AdmobAdvanced);

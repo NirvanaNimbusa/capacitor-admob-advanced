@@ -42,9 +42,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/DTX-Elliot/capacitor-admob-advanced.git"
+    "url": "https://github.com/DTX-Elliot/capacitor-admob-advanced"
   },
   "bugs": {
-    "url": "https://github.com/DTX-Elliot/capacitor-admob-advanced.git/issues"
+    "url": "https://github.com/DTX-Elliot/capacitor-admob-advanced/issues"
   }
 }

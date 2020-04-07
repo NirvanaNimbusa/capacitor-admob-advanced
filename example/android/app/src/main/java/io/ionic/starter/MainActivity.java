@@ -1,4 +1,4 @@
-package com.devutex.example;
+package io.ionic.starter;
 
 import android.os.Bundle;
 

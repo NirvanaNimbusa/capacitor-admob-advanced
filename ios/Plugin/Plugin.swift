@@ -5,8 +5,8 @@ import Capacitor
  * Please read the Capacitor iOS Plugin Development Guide
  * here: https://capacitor.ionicframework.com/docs/plugins/ios
  */
-@objc(AdMobAdvanced)
-public class AdMobAdvanced: CAPPlugin {
+@objc(AdmobAdvanced)
+public class AdmobAdvanced: CAPPlugin {
     
     @objc func echo(_ call: CAPPluginCall) {
         let value = call.getString("value") ?? ""
