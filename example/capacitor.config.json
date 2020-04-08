@@ -1,8 +1,11 @@
 {
-  "appId": "io.ionic.starter",
+  "appId": "com.devutex.example",
   "appName": "example",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
-  "cordova": {}
+  "cordova": {},
+  "server": {
+    "cleartext": true
+  }
 }
