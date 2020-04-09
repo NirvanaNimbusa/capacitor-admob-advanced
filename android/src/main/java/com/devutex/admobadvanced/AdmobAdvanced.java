@@ -100,22 +100,27 @@ public class AdmobAdvanced extends Plugin {
 
             // Setup AdView Layout
             adViewLayout = new RelativeLayout(getContext());
-            switch (adPosition) {
-                case "TOP_CENTER":
-                    adViewLayout.setGravity(Gravity.CENTER_VERTICAL | Gravity.TOP);
-                    break;
-                case "CENTER":
-                    adViewLayout.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-                    break;
-                case "BOTTOM_CENTER":
-                    adViewLayout.setGravity(Gravity.CENTER_VERTICAL | Gravity.BOTTOM);
-                    break;
-            }
+            adViewLayout.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
+            adViewLayout.setVerticalGravity(Gravity.BOTTOM);
 
             final CoordinatorLayout.LayoutParams adViewLayoutParams = new CoordinatorLayout.LayoutParams(
                     CoordinatorLayout.LayoutParams.WRAP_CONTENT,
                     CoordinatorLayout.LayoutParams.WRAP_CONTENT
             );
+
+            switch (adPosition) {
+                case "TOP_CENTER":
+                    adViewLayoutParams.gravity = Gravity.TOP;
+                    break;
+                case "CENTER":
+                    adViewLayoutParams.gravity = Gravity.CENTER;
+                    break;
+                case "BOTTOM_CENTER":
+                    adViewLayoutParams.gravity = Gravity.BOTTOM;
+                    break;
+            }
+
+
 
             // Set Bottom margin for TabBar
             boolean hasTabBar = call.getBoolean("hasTabBar", false);

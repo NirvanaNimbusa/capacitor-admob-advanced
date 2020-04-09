@@ -72,7 +72,7 @@ export interface BannerAdOptions {
     adIdAndroid: string;       // Banner ad ID Android (required)
     adIdIos: string;           // Banner ad ID iOS (required
     adSize?: AdSize;
-    adposition?: AdPosition;
+    adPosition?: AdPosition;
     width?: number;
     height?: number;
     x?: number;
