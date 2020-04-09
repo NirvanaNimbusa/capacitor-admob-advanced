@@ -111,15 +111,15 @@ public class AdmobAdvanced extends Plugin {
             switch (adPosition) {
                 case "TOP_CENTER":
                     adViewLayoutParams.gravity = Gravity.TOP;
-                    adViewLayoutParams.anchorGravity = Gravity.CENTER_VERTICAL;
+                    adViewLayoutParams.anchorGravity = Gravity.CENTER_HORIZONTAL;
                     break;
                 case "CENTER":
                     adViewLayoutParams.gravity = Gravity.CENTER;
-                    adViewLayoutParams.anchorGravity = Gravity.CENTER_VERTICAL;
+                    adViewLayoutParams.anchorGravity = Gravity.CENTER_HORIZONTAL;
                     break;
                 default:
                     adViewLayoutParams.gravity = Gravity.BOTTOM;
-                    adViewLayoutParams.anchorGravity = Gravity.CENTER_VERTICAL;
+                    adViewLayoutParams.anchorGravity = Gravity.CENTER_HORIZONTAL;
                     break;
             }
 
