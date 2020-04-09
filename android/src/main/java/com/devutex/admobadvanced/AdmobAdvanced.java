@@ -67,7 +67,7 @@ public class AdmobAdvanced extends Plugin {
         }
 
         String adSize     = call.getString("adSize", "SMART_BANNER");
-        String adPosition = call.getString("position", "BOTTOM_CENTER");
+        String adPosition = call.getString("adPosition", "BOTTOM");
         try {
             if (adView == null) {
                 adView = new AdView(getContext());
@@ -101,38 +101,33 @@ public class AdmobAdvanced extends Plugin {
             // Setup AdView Layout
             adViewLayout = new RelativeLayout(getContext());
             adViewLayout.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
-            adViewLayout.setVerticalGravity(Gravity.BOTTOM);
 
             final CoordinatorLayout.LayoutParams adViewLayoutParams = new CoordinatorLayout.LayoutParams(
-                    CoordinatorLayout.LayoutParams.WRAP_CONTENT,
-                    CoordinatorLayout.LayoutParams.WRAP_CONTENT
+                    CoordinatorLayout.LayoutParams.MATCH_PARENT,
+                    CoordinatorLayout.LayoutParams.MATCH_PARENT
             );
 
             switch (adPosition) {
-                case "TOP_CENTER":
-                    adViewLayoutParams.gravity = Gravity.TOP;
-                    adViewLayoutParams.anchorGravity = Gravity.CENTER_HORIZONTAL;
+                case "TOP":
+                    adViewLayout.setVerticalGravity(Gravity.TOP);
                     break;
                 case "CENTER":
-                    adViewLayoutParams.gravity = Gravity.CENTER;
-                    adViewLayoutParams.anchorGravity = Gravity.CENTER_HORIZONTAL;
+                    adViewLayout.setVerticalGravity(Gravity.CENTER);
                     break;
                 default:
-                    adViewLayoutParams.gravity = Gravity.BOTTOM;
-                    adViewLayoutParams.anchorGravity = Gravity.CENTER_HORIZONTAL;
+                    adViewLayout.setVerticalGravity(Gravity.BOTTOM);
                     break;
             }
 
             adViewLayout.setLayoutParams(adViewLayoutParams);
 
             // Set Bottom margin for TabBar
-            boolean hasTabBar = call.getBoolean("hasTabBar", false);
-            if (hasTabBar) {
-                float density = getContext().getResources().getDisplayMetrics().density;
-                float tabBarHeight = call.getInt("tabBarHeight", 56);
-                int margin = (int) (tabBarHeight * density);
-                adViewLayoutParams.setMargins(0, 0, 0, margin);
-            }
+            float density = getContext().getResources().getDisplayMetrics().density;
+            float bottomMargin = call.getInt("bottomMargin", 0);
+            float topMargin = call.getInt("topMargin", 0);
+            int bottomMarginParam = (int) (bottomMargin * density);
+            int topMarginParam = (int) (topMargin * density);
+            adViewLayoutParams.setMargins(0, topMarginParam, 0, bottomMarginParam);
 
             // Remove child from AdViewLayout
             getActivity().runOnUiThread(new Runnable() {

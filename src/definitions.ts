@@ -77,8 +77,8 @@ export interface BannerAdOptions {
     height?: number;
     x?: number;
     y?: number;
-    hasTabBar?: boolean;
-    tabBarHeight?: number; // Height in Pixal
+    bottomMargin?: number;
+    topMargin?: number;
     isTesting?: boolean;
 }
 
@@ -94,7 +94,6 @@ export interface RewardedAdOptions {
     adIdIos: string;           // Banner ad ID iOS (required)
     isTesting?: boolean;
 }
-
 
 /*
 *  For more information
@@ -147,9 +146,9 @@ export enum AdSize {
 * */
 
 export enum AdPosition {
-    TOP_CENTER = 'TOP_CENTER',
+    TOP = 'TOP',
     CENTER = 'CENTER',
-    BOTTOM_CENTER = 'BOTTOM_CENTER',
+    BOTTOM = 'BOTTOM',
 }
 
 export interface AdExtras {

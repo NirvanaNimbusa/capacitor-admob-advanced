@@ -12,7 +12,7 @@ export class HomePage {
     bannerOptions: BannerAdOptions = {
         adIdAndroid: 'ca-app-pub-3940256099942544/6300978111',
         adIdIos: 'ca-app-pub-3940256099942544/6300978111',
-        adSize: AdSize.BANNER,
+        adSize: AdSize.SMART_BANNER,
         adPosition: AdPosition.BOTTOM_CENTER,
         hasTabBar: false,
         isTesting: true
