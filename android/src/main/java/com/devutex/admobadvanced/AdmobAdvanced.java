@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
 import com.getcapacitor.JSObject;
 import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
@@ -101,25 +103,27 @@ public class AdmobAdvanced extends Plugin {
             adViewLayout.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
             adViewLayout.setVerticalGravity(Gravity.BOTTOM);
 
-            final RelativeLayout.LayoutParams adViewLayoutParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
+            final CoordinatorLayout.LayoutParams adViewLayoutParams = new CoordinatorLayout.LayoutParams(
+                    CoordinatorLayout.LayoutParams.WRAP_CONTENT,
+                    CoordinatorLayout.LayoutParams.WRAP_CONTENT
             );
 
             switch (adPosition) {
                 case "TOP_CENTER":
-                    adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                    adViewLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                    adViewLayoutParams.gravity = Gravity.TOP;
+                    adViewLayoutParams.anchorGravity = Gravity.CENTER_VERTICAL;
                     break;
                 case "CENTER":
-                    adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                    adViewLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                    adViewLayoutParams.gravity = Gravity.CENTER;
+                    adViewLayoutParams.anchorGravity = Gravity.CENTER_VERTICAL;
                     break;
-                case "BOTTOM_CENTER":
-                    adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                    adViewLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                default:
+                    adViewLayoutParams.gravity = Gravity.BOTTOM;
+                    adViewLayoutParams.anchorGravity = Gravity.CENTER_VERTICAL;
                     break;
             }
+
+            adViewLayout.setLayoutParams(adViewLayoutParams);
 
             // Set Bottom margin for TabBar
             boolean hasTabBar = call.getBoolean("hasTabBar", false);
