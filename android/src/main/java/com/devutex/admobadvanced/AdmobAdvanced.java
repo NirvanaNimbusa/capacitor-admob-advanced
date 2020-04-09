@@ -1,8 +1,6 @@
 package com.devutex.admobadvanced;
 
 import android.Manifest;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,24 +101,25 @@ public class AdmobAdvanced extends Plugin {
             adViewLayout.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
             adViewLayout.setVerticalGravity(Gravity.BOTTOM);
 
-            final CoordinatorLayout.LayoutParams adViewLayoutParams = new CoordinatorLayout.LayoutParams(
-                    CoordinatorLayout.LayoutParams.WRAP_CONTENT,
-                    CoordinatorLayout.LayoutParams.WRAP_CONTENT
+            final RelativeLayout.LayoutParams adViewLayoutParams = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
             );
 
             switch (adPosition) {
                 case "TOP_CENTER":
-                    adViewLayoutParams.gravity = Gravity.TOP;
+                    adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                    adViewLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                     break;
                 case "CENTER":
-                    adViewLayoutParams.gravity = Gravity.CENTER;
+                    adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                    adViewLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
                     break;
                 case "BOTTOM_CENTER":
-                    adViewLayoutParams.gravity = Gravity.BOTTOM;
+                    adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                    adViewLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                     break;
             }
-
-
 
             // Set Bottom margin for TabBar
             boolean hasTabBar = call.getBoolean("hasTabBar", false);

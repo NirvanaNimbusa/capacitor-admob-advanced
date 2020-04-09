@@ -13,7 +13,7 @@ export class HomePage {
         adIdAndroid: 'ca-app-pub-3940256099942544/6300978111',
         adIdIos: 'ca-app-pub-3940256099942544/6300978111',
         adSize: AdSize.BANNER,
-        adposition: AdPosition.BOTTOM_CENTER,
+        adPosition: AdPosition.BOTTOM_CENTER,
         hasTabBar: false,
         isTesting: true
     };
