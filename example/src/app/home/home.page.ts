@@ -12,7 +12,7 @@ export class HomePage {
     bannerOptions: BannerAdOptions = {
         adIdAndroid: 'ca-app-pub-3940256099942544/6300978111',
         adIdIos: 'ca-app-pub-3940256099942544/6300978111',
-        adSize: AdSize.BANNER,
+        adSize: AdSize.SMART_BANNER,
         adPosition: AdPosition.BOTTOM,
         isTesting: true,
         topMargin: 0,
@@ -30,6 +30,9 @@ export class HomePage {
         adIdIos: 'ca-app-pub-3940256099942544/6300978111',
         isTesting: true
     };
+
+    interstitialLoaded = false;
+    rewardedLoaded = false;
 
     constructor() { }
 
@@ -68,6 +71,7 @@ export class HomePage {
     loadInterstitial() {
         AdmobAdvanced.loadInterstitial(this.interstitialOptions).then(value => {
             console.log(value);
+            this.interstitialLoaded = true;
         }, error => {
             console.error(error);
         });
@@ -76,6 +80,7 @@ export class HomePage {
     showInterstitial() {
         AdmobAdvanced.showInterstitial().then(value => {
             console.log(value);
+            this.interstitialLoaded = false;
         }, error => {
             console.error(error);
         });
@@ -84,6 +89,7 @@ export class HomePage {
     loadRewarded() {
         AdmobAdvanced.loadRewarded(this.rewardedOptions).then(value => {
             console.log(value);
+            this.rewardedLoaded = true;
         }, error => {
             console.error(error);
         });
@@ -92,6 +98,7 @@ export class HomePage {
     showRewarded() {
         AdmobAdvanced.showRewarded().then(value => {
             console.log(value);
+            this.rewardedLoaded = false;
         }, error => {
             console.error(error);
         });
