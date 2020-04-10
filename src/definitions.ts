@@ -28,25 +28,25 @@ export interface AdmobAdvancedPlugin {
 
 
     // Prepare interstitial banner
-    prepareInterstitial(options: InterstitialAdOptions): Promise<{ value: boolean }>;
+    loadInterstitial(options: InterstitialAdOptions): Promise<{ value: boolean }>;
 
     // Show interstitial ad when it’s ready
     showInterstitial(): Promise<{ value: boolean }>;
 
     // Prepare a reward video ad
-    prepareRewardVideoAd(options: RewardedAdOptions): Promise<{ value: boolean }>;
+    loadRewarded(options: RewardedAdOptions): Promise<{ value: boolean }>;
 
     // Show a reward video ad
-    showRewardVideoAd(): Promise<{ value: boolean }>;
+    showRewarded(): Promise<{ value: boolean }>;
 
     // Pause RewardedVideo
-    pauseRewardedVideo(): Promise<{ value: boolean }>;
+    pauseRewarded(): Promise<{ value: boolean }>;
 
     // Resume RewardedVideo
-    resumeRewardedVideo(): Promise<{ value: boolean }>;
+    resumeRewarded(): Promise<{ value: boolean }>;
 
     // Close RewardedVideo
-    stopRewardedVideo(): Promise<{ value: boolean }>;
+    stopRewarded(): Promise<{ value: boolean }>;
 
 
     // AdMob listeners
@@ -72,14 +72,14 @@ export interface BannerAdOptions {
     adIdAndroid: string;       // Banner ad ID Android (required)
     adIdIos: string;           // Banner ad ID iOS (required
     adSize?: AdSize;
-    adPosition?: AdPosition;
-    width?: number;
-    height?: number;
-    x?: number;
-    y?: number;
-    bottomMargin?: number;
+    adPosition?: AdPosition; //Display the banner ad at "BOTTOM", "CENTER" or "TOP"
+    //width?: number;
+    //height?: number;
+    //x?: number;
+    //y?: number;
+    bottomMargin?: number; //set a bottom margin (in pixels) if you have a tab bar. This forces the banner to be 
     topMargin?: number;
-    isTesting?: boolean;
+    isTesting?: boolean; //set this to true to only display test ads (allows you to put your actual ad IDs in the options without displaying real ads)
 }
 
 export interface InterstitialAdOptions {

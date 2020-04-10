@@ -255,7 +255,7 @@ public class AdmobAdvanced extends Plugin {
 
     // Prepare interstitial Ad
     @PluginMethod()
-    public void prepareInterstitial(final PluginCall call) {
+    public void loadInterstitial(final PluginCall call) {
         this.call = call;
         Boolean isTesting = call.getBoolean("isTesting",false);
         String adId;
@@ -334,7 +334,7 @@ public class AdmobAdvanced extends Plugin {
                     });
                     call.success(new JSObject().put("value", true));
                 } else {
-                    call.error("The interstitial wasn't loaded yet.");
+                    call.error("The interstitial isn't loaded.");
                 }
                 }
             });
@@ -345,7 +345,7 @@ public class AdmobAdvanced extends Plugin {
 
     // Prepare a RewardVideoAd
     @PluginMethod()
-    public void prepareRewardVideoAd(final PluginCall call) {
+    public void loadRewarded(final PluginCall call) {
         this.call = call;
         /* dedicated test ad unit ID for Android rewarded video:
             ca-app-pub-3940256099942544/5224354917
@@ -417,7 +417,7 @@ public class AdmobAdvanced extends Plugin {
 
    // Show a RewardVideoAd
    @PluginMethod()
-   public void showRewardVideoAd(final PluginCall call) {
+   public void showRewarded(final PluginCall call) {
        try {
            getActivity().runOnUiThread(new Runnable() {
                @Override
@@ -442,7 +442,7 @@ public class AdmobAdvanced extends Plugin {
    
     // Pause a RewardVideoAd
     @PluginMethod()
-    public void pauseRewardedVideo(PluginCall call) {
+    public void pauseRewarded(PluginCall call) {
         try {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -458,7 +458,7 @@ public class AdmobAdvanced extends Plugin {
 
     // Resume a RewardVideoAd
     @PluginMethod()
-    public void resumeRewardedVideo(PluginCall call) {
+    public void resumeRewarded(PluginCall call) {
         try {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -474,7 +474,7 @@ public class AdmobAdvanced extends Plugin {
     
     // Destroy a RewardVideoAd
     @PluginMethod()
-    public void stopRewardedVideo(PluginCall call) {
+    public void stopRewarded(PluginCall call) {
         try {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
