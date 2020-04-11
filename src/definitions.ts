@@ -29,7 +29,7 @@ export interface AdmobAdvancedPlugin {
     }): Promise<{ consentStatus: string }>
 
     setConsentStatus(options: {
-        consentStatus: consentStatus
+        consentStatus: AdConsentStatus
     }): Promise<{ consentStatus: string }>
 
     getAdProviders(): Promise<{ adProviders: string[] }>
@@ -38,7 +38,7 @@ export interface AdmobAdvancedPlugin {
         personalizedAds: boolean,
         childDirected: boolean,
         underAgeOfConsent: boolean,
-        maxAdContentRating: adContentRating
+        maxAdContentRating: AdContentRating
     }): Promise<{ value: boolean }>
 
     // Show a banner Ad
@@ -94,12 +94,12 @@ export interface AdmobAdvancedPlugin {
 
 }
 
-export enum consentStatus {
+export enum AdConsentStatus {
     PERSONALIZED = 'PERSONALIZED',
     NON_PERSONALIZED = 'NON_PERSONALIZED'
 }
 
-export enum adContentRating {
+export enum AdContentRating {
     GENERAL = 'G',
     PARENTAL_GUIDANCE = 'PG',
     TEENS = 'T',
