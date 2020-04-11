@@ -68,12 +68,10 @@ public class AdmobAdvanced extends Plugin {
     @PluginMethod()
     public void initialiseWithConsent(final PluginCall call) {
         this.call = call;
-        final JSObject returnInfoInitialised = new JSObject();
         String appId = call.getString("appIdAndroid", "ca-app-pub-3940256099942544~3347511713");
         try {
             MobileAds.initialize(this.getContext(), appId);
             viewGroup = (ViewGroup) ((ViewGroup) getActivity().findViewById(android.R.id.content)).getChildAt(0);
-            returnInfoInitialised.put("admobValue", "Admob initialised successfully");
         }catch (Exception ex) {
             call.error(ex.getLocalizedMessage(), ex);
         }
@@ -85,15 +83,14 @@ public class AdmobAdvanced extends Plugin {
             @Override
             public void onConsentInfoUpdated(ConsentStatus consentStatus) {
                 // User's consent status successfully updated.
-                //returnInfoInitialised.put("consentStatus", consentStatus);
 
                 if(tfua) {
-                    returnInfoInitialised.put("consentStatus", "NON-PERSONALIZED");
+                    call.success(new JSObject().put("consentStatus", "NON-PERSONALIZED"));
                 } else {
                     if (ConsentInformation.getInstance(getContext()).isRequestLocationInEeaOrUnknown()) {
-                        returnInfoInitialised.put("consentStatus", consentStatus);
+                        call.success(new JSObject().put("consentStatus", consentStatus));
                     } else {
-                        returnInfoInitialised.put("consentStatus", "PERSONALIZED");
+                        call.success(new JSObject().put("consentStatus", "PERSONALIZED"));
                     }
                 }
             }
@@ -104,7 +101,6 @@ public class AdmobAdvanced extends Plugin {
                 call.error(errorDescription);
             }
         });
-        call.resolve(returnInfoInitialised);
     }
 
     @PluginMethod()

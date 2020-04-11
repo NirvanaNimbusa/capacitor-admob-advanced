@@ -21,7 +21,7 @@ export interface AdmobAdvancedPlugin {
         appIdIos: string,
         publisherId: string,
         tagUnderAgeOfConsent: boolean
-    }): Promise<{ admobValue: boolean, consentStatus: string }>
+    }): Promise<{ consentStatus: string }>
 
     //Show the Google Consent Form
     showGoogleConsentForm(options: {
