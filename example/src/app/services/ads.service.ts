@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import {
-    BannerAdOptions, InterstitialAdOptions, RewardedAdOptions, AdSize, AdPosition,
-    AdConsentStatus, AdContentRating
-} from 'capacitor-admob-advanced';
+import { BannerAdOptions, InterstitialAdOptions, RewardedAdOptions, AdSize, AdPosition } from 'capacitor-admob-advanced';
 const { AdmobAdvanced } = Plugins;
 
 @Injectable({
@@ -45,15 +42,15 @@ export class AdsService {
             appIdIos: 'ca-app-pub-3940256099942544~3347511713',     // replace with your actual iOS app ID
             publisherId: 'pub-3572449953921317',                     // replace with your actual publisher ID
             tagUnderAgeOfConsent: false
-        }).then(consentStatus => {
-            if (consentStatus === 'PERSONALIZED') {
+        }).then(data => {
+            if (data.consentStatus === 'PERSONALIZED') {
                 this.personalizedAds = true;
-            } else if (consentStatus === 'NON_PERSONALIZED') {
+            } else if (data.consentStatus === 'NON_PERSONALIZED') {
                 this.personalizedAds = false;
-            } else if (consentStatus === 'UNKNOWN') {
+            } else if (data.consentStatus === 'UNKNOWN') {
                 this.showGoogleConsentForm();
             } else {
-                console.log('Consent Status: ' + consentStatus);
+                console.log('Error: ' + data);
             }
         }, error => {
             console.error(error);
@@ -64,13 +61,13 @@ export class AdsService {
         AdmobAdvanced.showGoogleConsentForm({
             privacyPolicyURL: 'https://www.your.com/privacyurl', // replace with your actual privacy policy url
             showAdFreeOption: true
-        }).then(consentStatus => {
-            console.log(consentStatus);
-            if (consentStatus === 'PERSONALIZED') {
+        }).then(data => {
+            console.log(data.consentStatus);
+            if (data.consentStatus === 'PERSONALIZED') {
                 this.personalizedAds = true;
-            } else if (consentStatus === 'NON_PERSONALIZED') {
+            } else if (data.consentStatus === 'NON_PERSONALIZED') {
                 this.personalizedAds = false;
-            } else if (consentStatus === 'ADFREE') {
+            } else if (data.consentStatus === 'ADFREE') {
                 console.log('User wishes to pay for Ad free version');
             } else {
                 this.personalizedAds = false;
@@ -82,8 +79,8 @@ export class AdsService {
 
     public getAdProviders() {
         AdmobAdvanced.getAdProviders({
-        }).then(value => {
-            console.log(value);
+        }).then(data => {
+            console.log(data);
         }, error => {
             console.error(error);
         });
@@ -95,8 +92,13 @@ export class AdsService {
             childDirected: chldDct,
             underAgeOfConsent: uAOC,
             maxAdContentRating: mACR
-        }).then(consentStatus => {
-            console.log(consentStatus);
+        }).then(data => {
+            console.log(data.consentStatus);
+            if (data.consentStatus === 'PERSONALIZED') {
+                this.personalizedAds = true;
+            } else {
+                this.personalizedAds = false;
+            }
         }, error => {
             console.error(error);
         });

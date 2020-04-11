@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AdsService } from '../services/ads.service';
-import { AdConsentStatus, AdContentRating } from 'capacitor-admob-advanced';
+import { AdContentRating } from 'capacitor-admob-advanced';
 
 @Component({
     selector: 'app-home',

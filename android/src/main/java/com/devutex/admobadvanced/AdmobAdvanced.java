@@ -80,7 +80,7 @@ public class AdmobAdvanced extends Plugin {
             call.error(ex.getLocalizedMessage(), ex);
         }
         final boolean tfua = call.getBoolean("tagUnderAgeOfConsent", false);
-        ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
+        final ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
         consentInformation.setTagForUnderAgeOfConsent(tfua);
         String[] publisherId = {call.getString("publisherId", "pub-0123456789012345")};
         consentInformation.requestConsentInfoUpdate(publisherId, new ConsentInfoUpdateListener() {
@@ -92,13 +92,7 @@ public class AdmobAdvanced extends Plugin {
                     call.success(new JSObject().put("consentStatus", "NON_PERSONALIZED"));
                 } else {
                     if (ConsentInformation.getInstance(getContext()).isRequestLocationInEeaOrUnknown()) {
-                        if(consentStatus == ConsentStatus.PERSONALIZED){
-                            call.success(new JSObject().put("consentStatus", "PERSONALIZED"));
-                        } else if (consentStatus == ConsentStatus.NON_PERSONALIZED) {
-                            call.success(new JSObject().put("consentStatus", "NON_PERSONALIZED"));
-                        } else {
-                            call.success(new JSObject().put("consentStatus", "UNKNOWN"));
-                        }
+                        call.success(new JSObject().put("consentStatus", consentStatus));
                     } else {
                         call.success(new JSObject().put("consentStatus", "PERSONALIZED"));
                     }
@@ -136,13 +130,7 @@ public class AdmobAdvanced extends Plugin {
                                     if (userPrefersAdFree) {
                                         call.success(new JSObject().put("consentStatus", "ADFREE"));
                                     } else {
-                                        if(consentStatus == ConsentStatus.PERSONALIZED){
-                                            call.success(new JSObject().put("consentStatus", "PERSONALIZED"));
-                                        } else if (consentStatus == ConsentStatus.NON_PERSONALIZED) {
-                                            call.success(new JSObject().put("consentStatus", "NON_PERSONALIZED"));
-                                        } else {
-                                            call.success(new JSObject().put("consentStatus", "UNKNOWN"));
-                                        }
+                                        call.success(new JSObject().put("consentStatus", consentStatus));
                                     }
                                 }
 
