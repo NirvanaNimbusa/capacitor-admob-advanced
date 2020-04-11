@@ -50,4 +50,8 @@ export class HomePage {
     public setConsentStatus() {
         this.adsService.updateAdExtras(!this.adsService.personalizedAds, false, false, AdContentRating.MATURE_AUDIENCE);
     }
+
+    public listAdProviders() {
+        this.adsService.getAdProviders();
+    }
 }

@@ -62,13 +62,13 @@ export class AdsService {
             privacyPolicyURL: 'https://www.your.com/privacyurl', // replace with your actual privacy policy url
             showAdFreeOption: true
         }).then(data => {
-            console.log(data.consentStatus);
             if (data.consentStatus === 'PERSONALIZED') {
                 this.personalizedAds = true;
             } else if (data.consentStatus === 'NON_PERSONALIZED') {
                 this.personalizedAds = false;
             } else if (data.consentStatus === 'ADFREE') {
                 console.log('User wishes to pay for Ad free version');
+                this.personalizedAds = false;
             } else {
                 this.personalizedAds = false;
             }
@@ -80,7 +80,7 @@ export class AdsService {
     public getAdProviders() {
         AdmobAdvanced.getAdProviders({
         }).then(data => {
-            console.log(data);
+            console.log(data.adProviders);
         }, error => {
             console.error(error);
         });
@@ -93,7 +93,6 @@ export class AdsService {
             underAgeOfConsent: uAOC,
             maxAdContentRating: mACR
         }).then(data => {
-            console.log(data.consentStatus);
             if (data.consentStatus === 'PERSONALIZED') {
                 this.personalizedAds = true;
             } else {
