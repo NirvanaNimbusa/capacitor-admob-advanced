@@ -44,12 +44,12 @@ export class AdsService {
             tagUnderAgeOfConsent: false
         }).then(consentStatus => {
             console.log(consentStatus);
-            if (consentStatus === 'PERSONALIZED') {
+            if (consentStatus.consentStatus === 'PERSONALIZED') {
                 this.personalizedAds = true;
-            } else if (consentStatus === 'NON-PERSONALIZED') {
+            } else if (consentStatus.consentStatus === 'NON-PERSONALIZED') {
                 this.personalizedAds = false;
-            } else if (consentStatus === 'UNKNOWN') {
-                this.showConsentForm();
+            } else if (consentStatus.consentStatus === 'UNKNOWN') {
+                this.showGoogleConsentForm();
             } else {
                 console.log('Consent Status: ' + consentStatus);
             }
@@ -59,13 +59,13 @@ export class AdsService {
         );
     }
 
-    public showConsentForm() {
+    public showGoogleConsentForm() {
         AdmobAdvanced.showGoogleConsentForm({
             privacyPolicyURL: 'https://www.your.com/privacyurl', // replace with your actual privacy policy url
             showAdFreeOption: true
         }).then(consentStatus => {
             console.log(consentStatus);
-            if (consentStatus === 'PERSONALIZED') {
+            if (consentStatus.consentStatus === 'PERSONALIZED') {
                 this.personalizedAds = true;
             } else {
                 this.personalizedAds = false;
