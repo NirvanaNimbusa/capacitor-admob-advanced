@@ -201,6 +201,21 @@ public class AdmobAdvanced extends Plugin {
     }
 
     @PluginMethod()
+    public void setConsentStatus(final PluginCall call) {
+        this.call = call;
+        ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
+        if(call.getString("consentStatus") == "PERSONALIZED") {
+            consentInformation.setConsentStatus(ConsentStatus.PERSONALIZED);
+            call.success(new JSObject().put("value", true));
+        } else if (call.getString("consentStatus") == "NON_PERSONALIZED") {
+            consentInformation.setConsentStatus(ConsentStatus.NON_PERSONALIZED);
+            call.success(new JSObject().put("value", true));
+        } else {
+            call.error("Consent Status not set");
+        }
+    }
+
+    @PluginMethod()
     public void getAdProviders(final PluginCall call) {
         this.call = call;
         List<AdProvider> adProviders = ConsentInformation.getInstance(getContext()).getAdProviders();

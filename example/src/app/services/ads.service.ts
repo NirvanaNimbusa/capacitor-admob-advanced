@@ -33,6 +33,7 @@ export class AdsService {
     personalizedAds = false;
     interstitialLoaded = false;
     rewardedLoaded = false;
+    userConsent;
 
     constructor() { }
 
@@ -70,10 +71,21 @@ export class AdsService {
             } else {
                 this.personalizedAds = false;
             }
+            this.userConsent = consentStatus.consentStatus;
         }, error => {
             console.error(error);
         });
         this.updateAdExtras();
+    }
+
+    public setConsentStatus() {
+        AdmobAdvanced.setConsentStatus({
+            consentStatus: consentStatus.PERSONALIZED
+        }).then(value => {
+            console.log(value);
+        }, error => {
+            console.error(error);
+        });
     }
 
     public getAdProviders() {
@@ -90,7 +102,7 @@ export class AdsService {
             personalizedAds: this.personalizedAds,
             childDirected: false,
             underAgeOfConsent: false,
-            maxAdContentRating: 'MATURE_AUDIENCE'
+            maxAdContentRating: adContentRating.MATURE_AUDIENCE
         }).then(value => {
             console.log(value);
         }, error => {

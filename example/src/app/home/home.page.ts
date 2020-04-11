@@ -8,8 +8,6 @@ import { AdsService } from '../services/ads.service';
 })
 export class HomePage {
 
-    userConsent;
-
     constructor(public adsService: AdsService) { }
 
     public showBanner() {
@@ -46,9 +44,5 @@ export class HomePage {
 
     public showGoogleConsentForm() {
         this.adsService.showGoogleConsentForm();
-    }
-
-    public getAdProviders() {
-        this.adsService.getAdProviders();
     }
 }
