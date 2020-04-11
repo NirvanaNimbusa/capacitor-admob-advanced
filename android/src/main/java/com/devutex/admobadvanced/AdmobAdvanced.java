@@ -1,18 +1,20 @@
 package com.devutex.admobadvanced;
 
 import android.Manifest;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.google.ads.consent.ConsentForm;
+import com.google.ads.consent.ConsentFormListener;
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -22,6 +24,14 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
+import com.google.ads.consent.ConsentInfoUpdateListener;
+import com.google.ads.consent.ConsentInformation;
+import com.google.ads.consent.ConsentStatus;
+
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 @NativePlugin(
@@ -38,34 +48,142 @@ public class AdmobAdvanced extends Plugin {
     private AdView adView;
     private InterstitialAd interstitialAd;
     private RewardedVideoAd rewardedVideoAd;
+    private String personalisedAds = "1";
 
-    // Initialize AdMob with appId
+    // Initialize Admob
     @PluginMethod()
-    public void initialize(PluginCall call) {
-        /* Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 */
+    public void initialise(final PluginCall call) {
+        this.call = call;
         String appId = call.getString("appIdAndroid", "ca-app-pub-3940256099942544~3347511713");
         try {
             MobileAds.initialize(this.getContext(), appId);
             viewGroup = (ViewGroup) ((ViewGroup) getActivity().findViewById(android.R.id.content)).getChildAt(0);
-            call.success();
+            call.success(new JSObject().put("value", true));
         }catch (Exception ex) {
             call.error(ex.getLocalizedMessage(), ex);
         }
     }
 
+    // Initialize AdMob with Consent SDK
+    @PluginMethod()
+    public void initialiseWithConsent(final PluginCall call) {
+        this.call = call;
+        final JSObject returnInfoInitialised = new JSObject();
+        String appId = call.getString("appIdAndroid", "ca-app-pub-3940256099942544~3347511713");
+        try {
+            MobileAds.initialize(this.getContext(), appId);
+            viewGroup = (ViewGroup) ((ViewGroup) getActivity().findViewById(android.R.id.content)).getChildAt(0);
+            returnInfoInitialised.put("admobValue", "Admob initialised successfully");
+        }catch (Exception ex) {
+            call.error(ex.getLocalizedMessage(), ex);
+        }
+        final boolean tfua = call.getBoolean("tagUnderAgeOfConsent", false);
+        ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
+        consentInformation.setTagForUnderAgeOfConsent(tfua);
+        String[] publisherId = {call.getString("publisherId", "pub-0123456789012345")};
+        consentInformation.requestConsentInfoUpdate(publisherId, new ConsentInfoUpdateListener() {
+            @Override
+            public void onConsentInfoUpdated(ConsentStatus consentStatus) {
+                // User's consent status successfully updated.
+                //returnInfoInitialised.put("consentStatus", consentStatus);
+
+                if(tfua) {
+                    returnInfoInitialised.put("consentStatus", "NON-PERSONALIZED");
+                } else {
+                    if (ConsentInformation.getInstance(getContext()).isRequestLocationInEeaOrUnknown()) {
+                        returnInfoInitialised.put("consentStatus", consentStatus);
+                    } else {
+                        returnInfoInitialised.put("consentStatus", "PERSONALIZED");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailedToUpdateConsentInfo(String errorDescription) {
+                // User's consent status failed to update.
+                call.error(errorDescription);
+            }
+        });
+        call.resolve(returnInfoInitialised);
+    }
+
+    @PluginMethod()
+    public void showConsentForm(String privacy, final PluginCall call){
+        this.call = call;
+        URL privacyUrl = null;
+        try {
+            privacyUrl = new URL(call.getString("privacyPolicyURL", null));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        if(call.getBoolean("showAdFreeOption", false)) {
+            ConsentForm form = new ConsentForm.Builder(getContext(), privacyUrl)
+                    .withListener(new ConsentFormListener() {
+                        @Override
+                        public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
+                            // Consent form was closed.
+                            if (userPrefersAdFree) {
+                                call.success(new JSObject().put("consentStatus", "ADFREE"));
+                            } else {
+                                call.success(new JSObject().put("consentStatus", consentStatus));
+                            }
+                        }
+
+                        @Override
+                        public void onConsentFormError(String errorDescription) {
+                            // Consent form error.
+                            call.error(errorDescription);
+                        }
+                    })
+                    .withPersonalizedAdsOption()
+                    .withNonPersonalizedAdsOption()
+                    .withAdFreeOption()
+                    .build();
+            form.load();
+            form.show();
+        } else {
+            ConsentForm form = new ConsentForm.Builder(getContext(), privacyUrl)
+                    .withListener(new ConsentFormListener() {
+                        @Override
+                        public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
+                            // Consent form was closed.
+                            call.success(new JSObject().put("consentStatus", consentStatus));
+                        }
+
+                        @Override
+                        public void onConsentFormError(String errorDescription) {
+                            // Consent form error.
+                            call.error(errorDescription);
+                        }
+                    })
+                    .withPersonalizedAdsOption()
+                    .withNonPersonalizedAdsOption()
+                    .build();
+            form.load();
+            form.show();
+        }
+    }
+
+    @PluginMethod()
+    public void updateAdExtras(final PluginCall call){
+        this.call = call;
+        if(call.getBoolean("personalizedAds", false)) {
+            this.personalisedAds = "0";
+        } else {
+            this.personalisedAds = "1";
+        }
+    }
 
     // Show a banner Ad
     @PluginMethod()
-    public void showBanner(PluginCall call) {
-        /* Dedicated test ad unit ID for Android banners: ca-app-pub-3940256099942544/6300978111*/
-        Boolean isTesting = call.getBoolean("isTesting",false);
+    public void showBanner(final PluginCall call) {
+        this.call = call;
         String adId;
-        if (isTesting) {
+        if (call.getBoolean("isTesting",false)) {
             adId= "ca-app-pub-3940256099942544/6300978111";
         } else {
             adId= call.getString("adIdAndroid", "ca-app-pub-3940256099942544/6300978111");
         }
-
         String adSize     = call.getString("adSize", "SMART_BANNER");
         String adPosition = call.getString("adPosition", "BOTTOM");
         try {
@@ -146,7 +264,11 @@ public class AdmobAdvanced extends Plugin {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adView.loadAd(new AdRequest.Builder().build());
+                    Bundle extras = new Bundle();
+                    extras.putString("npa", personalisedAds);
+                    adView.loadAd(new AdRequest.Builder()
+                            .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                            .build());
                     adView.setAdListener(new AdListener(){
                         @Override
                         public void onAdLoaded() {
@@ -257,9 +379,8 @@ public class AdmobAdvanced extends Plugin {
     @PluginMethod()
     public void loadInterstitial(final PluginCall call) {
         this.call = call;
-        Boolean isTesting = call.getBoolean("isTesting",false);
         String adId;
-        if (isTesting) {
+        if (call.getBoolean("isTesting",false)) {
             adId= "ca-app-pub-3940256099942544/1033173712";
         } else {
             adId= call.getString("adIdAndroid", "ca-app-pub-3940256099942544/1033173712");
@@ -271,7 +392,11 @@ public class AdmobAdvanced extends Plugin {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    interstitialAd.loadAd(new AdRequest.Builder().build());
+                    Bundle extras = new Bundle();
+                    extras.putString("npa", personalisedAds);
+                    interstitialAd.loadAd(new AdRequest.Builder()
+                            .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                            .build());
                     interstitialAd.setAdListener(new AdListener() {
                         @Override
                         public void onAdLoaded() {
@@ -347,12 +472,8 @@ public class AdmobAdvanced extends Plugin {
     @PluginMethod()
     public void loadRewarded(final PluginCall call) {
         this.call = call;
-        /* dedicated test ad unit ID for Android rewarded video:
-            ca-app-pub-3940256099942544/5224354917
-        */
-        Boolean isTesting = call.getBoolean("isTesting",false);
         final String adId;
-        if (isTesting) {
+        if (call.getBoolean("isTesting",false)) {
             adId= "ca-app-pub-3940256099942544/5224354917";
         } else {
             adId = call.getString("adIdAndroid", "ca-app-pub-3940256099942544/5224354917");
@@ -364,7 +485,12 @@ public class AdmobAdvanced extends Plugin {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    rewardedVideoAd.loadAd(adId, new AdRequest.Builder().build());
+                    Bundle extras = new Bundle();
+                    extras.putString("npa", personalisedAds);
+                    rewardedVideoAd.loadAd(adId, new AdRequest
+                            .Builder()
+                            .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                            .build());
                     rewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
                         @Override
                         public void onRewardedVideoAdLoaded() {

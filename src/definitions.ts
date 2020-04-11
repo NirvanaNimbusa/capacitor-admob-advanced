@@ -8,10 +8,29 @@ declare global {
 
 export interface AdmobAdvancedPlugin {
 
-    // Initialize AdMob with appId
+    // Initialize Admob
     initialize(options: {
         appIdAndroid: string,
-        appIdIos: string
+        appIdIos: string,
+        publisherId: string,
+    }): Promise<{ value: boolean }>
+
+    // Initialize AdMob with the Consent SDK
+    initializeWithConsent(options: {
+        appIdAndroid: string,
+        appIdIos: string,
+        publisherId: string,
+        tagUnderAgeOfConsent: boolean
+    }): Promise<{ admobValue: boolean, consentStatus: string }>
+
+    //Show the Google Consent Form
+    showGoogleConsentForm(options: {
+        privacyPolicyURL: string,
+        showAdFreeOption: boolean
+    }): Promise<{ consentStatus: string }>
+
+    updateAdExtras(options: {
+        personalizedAds: boolean
     }): Promise<{ value: boolean }>
 
     // Show a banner Ad
@@ -25,7 +44,6 @@ export interface AdmobAdvancedPlugin {
 
     // Destroy the banner, remove it from screen.
     removeBanner(): Promise<{ value: boolean }>;
-
 
     // Prepare interstitial banner
     loadInterstitial(options: InterstitialAdOptions): Promise<{ value: boolean }>;
@@ -56,7 +74,7 @@ export interface AdmobAdvancedPlugin {
     addListener(eventName: 'onAdClosed', listenerFunc: (info: any) => void): PluginListenerHandle;
     addListener(eventName: 'onAdLeftApplication', listenerFunc: (info: any) => void): PluginListenerHandle;
 
-    // Admob RewardVideo listeners
+    // Admob Rewarded Video listeners
     addListener(eventName: 'onRewardedVideoAdLoaded', listenerFunc: (info: any) => void): PluginListenerHandle;
     addListener(eventName: 'onRewardedVideoAdOpened', listenerFunc: (info: any) => void): PluginListenerHandle;
     addListener(eventName: 'onRewardedVideoStarted', listenerFunc: (info: any) => void): PluginListenerHandle;
@@ -73,10 +91,6 @@ export interface BannerAdOptions {
     adIdIos: string;           // Banner ad ID iOS (required
     adSize?: AdSize;
     adPosition?: AdPosition; //Display the banner ad at "BOTTOM", "CENTER" or "TOP"
-    //width?: number;
-    //height?: number;
-    //x?: number;
-    //y?: number;
     bottomMargin?: number; //set a bottom margin (in pixels) if you have a tab bar. This forces the banner to be 
     topMargin?: number;
     isTesting?: boolean; //set this to true to only display test ads (allows you to put your actual ad IDs in the options without displaying real ads)
@@ -86,7 +100,6 @@ export interface InterstitialAdOptions {
     adIdAndroid: string;       // Banner ad ID Android (required)
     adIdIos: string;           // Banner ad ID iOS (required)
     isTesting?: boolean;
-
 }
 
 export interface RewardedAdOptions {
@@ -135,7 +148,7 @@ export enum AdSize {
     // this is intended for mediation ad networks only.
 
     // To define a custom banner size, set your desired AdSize
-    CUSTOM = 'CUSTOM'
+    //CUSTOM = 'CUSTOM'
 
 }
 
@@ -149,15 +162,6 @@ export enum AdPosition {
     TOP = 'TOP',
     CENTER = 'CENTER',
     BOTTOM = 'BOTTOM',
-}
-
-export interface AdExtras {
-    color_bg?: string;
-    color_bg_top?: string;
-    color_border?: string;
-    color_link?: string;
-    color_text?: string;
-    color_url?: string;
 }
 
 

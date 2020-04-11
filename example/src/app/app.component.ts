@@ -3,6 +3,7 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Plugins } from '@capacitor/core';
+import { AdsService } from './services/ads.service';
 const { AdmobAdvanced } = Plugins;
 
 @Component({
@@ -14,18 +15,16 @@ export class AppComponent {
     constructor(
         private platform: Platform,
         private splashScreen: SplashScreen,
-        private statusBar: StatusBar
+        private statusBar: StatusBar,
+        private adsService: AdsService
     ) {
 
-        this.initializeApp();
+        this.initialiseApp();
     }
 
-    initializeApp() {
+    initialiseApp() {
         this.platform.ready().then(() => {
-            AdmobAdvanced.initialize({
-                appIdAndroid: 'ca-app-pub-3572449953921317~8063185404',
-                appIdIos: 'ca-app-pub-3940256099942544~3347511713'
-            });
+            this.adsService.initialise();
             this.statusBar.styleDefault();
             this.splashScreen.hide();
         });

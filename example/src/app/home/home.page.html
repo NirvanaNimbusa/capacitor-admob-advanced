@@ -39,7 +39,7 @@
                 </ion-button>
             </ion-col>
             <ion-col>
-                <ion-button (click)="showInterstitial()" [disabled]="!interstitialLoaded">
+                <ion-button (click)="showInterstitial()" [disabled]="!adsService.interstitialLoaded">
                     Show Interstitial
                 </ion-button>
             </ion-col>
@@ -51,7 +51,7 @@
                 </ion-button>
             </ion-col>
             <ion-col>
-                <ion-button (click)="showRewarded()" [disabled]="!rewardedLoaded">
+                <ion-button (click)="showRewarded()" [disabled]="!adsService.rewardedLoaded">
                     Show Rewarded Video
                 </ion-button>
             </ion-col>
