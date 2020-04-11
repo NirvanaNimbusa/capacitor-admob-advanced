@@ -96,7 +96,8 @@ export interface AdmobAdvancedPlugin {
 
 export enum AdConsentStatus {
     PERSONALIZED = 'PERSONALIZED',
-    NON_PERSONALIZED = 'NON_PERSONALIZED'
+    NON_PERSONALIZED = 'NON_PERSONALIZED',
+    UNKNOWN = 'UNKNOWN'
 }
 
 export enum AdContentRating {

@@ -53,6 +53,5 @@ export class HomePage {
         } else {
             this.adsService.setConsentStatus(AdConsentStatus.PERSONALIZED);
         }
-
     }
 }

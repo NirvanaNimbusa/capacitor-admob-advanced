@@ -7,6 +7,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.NativePlugin;
@@ -204,15 +206,15 @@ public class AdmobAdvanced extends Plugin {
     public void setConsentStatus(final PluginCall call) {
         this.call = call;
         ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
+        Toast.makeText(getContext(), call.getString("consentStatus"), Toast.LENGTH_SHORT).show();
         if(call.getString("consentStatus") == "PERSONALIZED") {
             consentInformation.setConsentStatus(ConsentStatus.PERSONALIZED);
-            call.success(new JSObject().put("consentStatus", consentInformation.getConsentStatus()));
         } else if (call.getString("consentStatus") == "NON_PERSONALIZED") {
             consentInformation.setConsentStatus(ConsentStatus.NON_PERSONALIZED);
-            call.success(new JSObject().put("consentStatus", consentInformation.getConsentStatus()));
         } else {
             call.error("Consent Status not set");
         }
+        call.success(new JSObject().put("consentStatus", consentInformation.getConsentStatus()));
     }
 
     @PluginMethod()

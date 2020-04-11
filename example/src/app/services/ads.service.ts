@@ -82,6 +82,7 @@ export class AdsService {
     }
 
     public setConsentStatus(adc) {
+        console.log(adc);
         AdmobAdvanced.setConsentStatus({
             consentStatus: adc
         }).then(value => {
