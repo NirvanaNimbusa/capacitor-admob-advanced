@@ -104,7 +104,7 @@ public class AdmobAdvanced extends Plugin {
     }
 
     @PluginMethod()
-    public void showGoogleConsentForm(String privacy, final PluginCall call){
+    public void showGoogleConsentForm(final PluginCall call){
         this.call = call;
         URL privacyUrl = null;
         try {
