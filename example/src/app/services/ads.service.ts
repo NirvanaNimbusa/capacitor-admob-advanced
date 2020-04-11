@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import { BannerAdOptions, InterstitialAdOptions, RewardedAdOptions, AdSize, AdPosition, AdConsentStatus, AdContentRating } from 'capacitor-admob-advanced';
+import {
+    BannerAdOptions, InterstitialAdOptions, RewardedAdOptions, AdSize, AdPosition,
+    AdConsentStatus, AdContentRating
+} from 'capacitor-admob-advanced';
 const { AdmobAdvanced } = Plugins;
 
 @Injectable({
@@ -78,9 +81,9 @@ export class AdsService {
         this.updateAdExtras();
     }
 
-    public setConsentStatus() {
+    public setConsentStatus(adc) {
         AdmobAdvanced.setConsentStatus({
-            consentStatus: AdConsentStatus.PERSONALIZED
+            consentStatus: adc
         }).then(value => {
             console.log(value);
         }, error => {

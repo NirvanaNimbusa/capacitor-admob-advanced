@@ -206,10 +206,10 @@ public class AdmobAdvanced extends Plugin {
         ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
         if(call.getString("consentStatus") == "PERSONALIZED") {
             consentInformation.setConsentStatus(ConsentStatus.PERSONALIZED);
-            call.success(new JSObject().put("value", true));
+            call.success(new JSObject().put("consentStatus", consentInformation.getConsentStatus()));
         } else if (call.getString("consentStatus") == "NON_PERSONALIZED") {
             consentInformation.setConsentStatus(ConsentStatus.NON_PERSONALIZED);
-            call.success(new JSObject().put("value", true));
+            call.success(new JSObject().put("consentStatus", consentInformation.getConsentStatus()));
         } else {
             call.error("Consent Status not set");
         }
@@ -517,7 +517,7 @@ public class AdmobAdvanced extends Plugin {
         }
     }
 
-    // Prepare a RewardVideoAd
+    // Load a RewardVideoAd
     @PluginMethod()
     public void loadRewarded(final PluginCall call) {
         this.call = call;
