@@ -19,8 +19,7 @@ export interface AdmobAdvancedPlugin {
     initializeWithConsent(options: {
         appIdAndroid: string,
         appIdIos: string,
-        publisherId: string,
-        tagUnderAgeOfConsent: boolean
+        publisherId: string
     }): Promise<{ consentStatus: string }>
 
     //Show the Google Consent Form
@@ -29,8 +28,13 @@ export interface AdmobAdvancedPlugin {
         showAdFreeOption: boolean
     }): Promise<{ consentStatus: string }>
 
+    getAdProviders(): Promise<{ adProviders: string[] }>
+
     updateAdExtras(options: {
-        personalizedAds: boolean
+        personalizedAds: boolean,
+        childDirected: boolean,
+        underAgeOfConsent: boolean,
+        maxAdContentRating: adContentRating
     }): Promise<{ value: boolean }>
 
     // Show a banner Ad
@@ -84,6 +88,13 @@ export interface AdmobAdvancedPlugin {
     addListener(eventName: 'onRewardedVideoAdFailedToLoad', listenerFunc: (info: any) => void): PluginListenerHandle;
     addListener(eventName: 'onRewardedVideoCompleted', listenerFunc: (info: any) => void): PluginListenerHandle;
 
+}
+
+export enum adContentRating {
+    GENERAL = 'G',
+    PARENTAL_GUIDANCE = 'PG',
+    TEENS = 'T',
+    MATURE_AUDIENCE = 'MA'
 }
 
 export interface BannerAdOptions {

@@ -56,5 +56,17 @@
                 </ion-button>
             </ion-col>
         </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-button (click)="showGoogleConsentForm()">
+                    User Consent: {{userConsent}}
+                </ion-button>
+            </ion-col>
+            <ion-col>
+                <ion-button (click)="getAdProviders()">
+                    Get Ad Providers
+                </ion-button>
+            </ion-col>
+        </ion-row>
     </ion-grid>
 </ion-content>

@@ -76,9 +76,21 @@ export class AdsService {
         this.updateAdExtras();
     }
 
+    public getAdProviders() {
+        AdmobAdvanced.getAdProviders({
+        }).then(value => {
+            console.log(value);
+        }, error => {
+            console.error(error);
+        });
+    }
+
     public updateAdExtras() {
         AdmobAdvanced.updateAdExtras({
-            personalizedAds: this.personalizedAds
+            personalizedAds: this.personalizedAds,
+            childDirected: false,
+            underAgeOfConsent: false,
+            maxAdContentRating: 'MATURE_AUDIENCE'
         }).then(value => {
             console.log(value);
         }, error => {

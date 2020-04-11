@@ -13,6 +13,7 @@ import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.google.ads.consent.AdProvider;
 import com.google.ads.consent.ConsentForm;
 import com.google.ads.consent.ConsentFormListener;
 import com.google.ads.mediation.admob.AdMobAdapter;
@@ -22,17 +23,16 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.ads.consent.ConsentInfoUpdateListener;
 import com.google.ads.consent.ConsentInformation;
 import com.google.ads.consent.ConsentStatus;
-
-import org.json.JSONObject;
-
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 
 @NativePlugin(
@@ -49,7 +49,7 @@ public class AdmobAdvanced extends Plugin {
     private AdView adView;
     private InterstitialAd interstitialAd;
     private RewardedVideoAd rewardedVideoAd;
-    private String personalisedAds = "1";
+    private boolean personalisedAds = true;
     private ConsentForm form;
 
     // Initialize Admob
@@ -187,11 +187,33 @@ public class AdmobAdvanced extends Plugin {
     @PluginMethod()
     public void updateAdExtras(final PluginCall call){
         this.call = call;
-        if(call.getBoolean("personalizedAds", false)) {
-            this.personalisedAds = "0";
-        } else {
-            this.personalisedAds = "1";
+        personalisedAds = call.getBoolean("personalizedAds", false);
+        int childDirected = call.getBoolean("childDirected", false) ? 1 : 0;
+        int underAgeOfConsent = call.getBoolean("underAgeOfConsent", false) ? 1 : 0;
+        RequestConfiguration requestConfiguration = MobileAds.getRequestConfiguration()
+                .toBuilder()
+                .setTagForChildDirectedTreatment(childDirected)
+                .setTagForUnderAgeOfConsent(underAgeOfConsent)
+                .setMaxAdContentRating(call.getString("maxAdContentRating", "MA"))
+                .build();
+        MobileAds.setRequestConfiguration(requestConfiguration);
+        call.success(new JSObject().put("value", true));
+    }
+
+    @PluginMethod()
+    public void getAdProviders(final PluginCall call) {
+        this.call = call;
+        List<AdProvider> adProviders = ConsentInformation.getInstance(getContext()).getAdProviders();
+        call.success(new JSObject().put("adProviders", adProviders));
+    }
+
+    public AdRequest buildAdRequest() {
+        Bundle extras = new Bundle();
+        AdRequest.Builder builder = new AdRequest.Builder();
+        if(!personalisedAds){
+            extras.putString("npa", "1");
         }
+        return builder.addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
     }
 
     // Show a banner Ad
@@ -284,11 +306,7 @@ public class AdmobAdvanced extends Plugin {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Bundle extras = new Bundle();
-                    extras.putString("npa", personalisedAds);
-                    adView.loadAd(new AdRequest.Builder()
-                            .addNetworkExtrasBundle(AdMobAdapter.class, extras)
-                            .build());
+                    adView.loadAd(buildAdRequest());
                     adView.setAdListener(new AdListener(){
                         @Override
                         public void onAdLoaded() {
@@ -412,11 +430,7 @@ public class AdmobAdvanced extends Plugin {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Bundle extras = new Bundle();
-                    extras.putString("npa", personalisedAds);
-                    interstitialAd.loadAd(new AdRequest.Builder()
-                            .addNetworkExtrasBundle(AdMobAdapter.class, extras)
-                            .build());
+                    interstitialAd.loadAd(buildAdRequest());
                     interstitialAd.setAdListener(new AdListener() {
                         @Override
                         public void onAdLoaded() {
@@ -505,12 +519,7 @@ public class AdmobAdvanced extends Plugin {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Bundle extras = new Bundle();
-                    extras.putString("npa", personalisedAds);
-                    rewardedVideoAd.loadAd(adId, new AdRequest
-                            .Builder()
-                            .addNetworkExtrasBundle(AdMobAdapter.class, extras)
-                            .build());
+                    rewardedVideoAd.loadAd(adId, buildAdRequest());
                     rewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
                         @Override
                         public void onRewardedVideoAdLoaded() {
