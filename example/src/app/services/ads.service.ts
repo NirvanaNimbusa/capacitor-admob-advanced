@@ -37,7 +37,7 @@ export class AdsService {
     constructor() { }
 
     public initialise() {
-        AdmobAdvanced.initialiseWithConsent({
+        AdmobAdvanced.initializeWithConsent({
             appIdAndroid: 'ca-app-pub-3572449953921317~8063185404', // replace with your actual Android app ID
             appIdIos: 'ca-app-pub-3940256099942544~3347511713',     // replace with your actual iOS app ID
             publisherId: 'pub-3572449953921317',                     // replace with your actual publisher ID

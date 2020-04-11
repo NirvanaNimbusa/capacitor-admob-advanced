@@ -135,7 +135,12 @@ public class AdmobAdvanced extends Plugin {
                         @Override
                         public void onConsentFormLoaded() {
                             // Consent form error.
-                            form.show();
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    form.show();
+                                }
+                            });
                         }
                     })
                     .withPersonalizedAdsOption()
@@ -162,7 +167,12 @@ public class AdmobAdvanced extends Plugin {
                         @Override
                         public void onConsentFormLoaded() {
                             // Consent form error.
-                            form.show();
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    form.show();
+                                }
+                            });
                         }
                     })
                     .withPersonalizedAdsOption()
