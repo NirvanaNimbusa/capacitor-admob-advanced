@@ -33,10 +33,9 @@ export class AdsService {
         isTesting: true
     };
 
-    personalizedAds = false;
     interstitialLoaded = false;
     rewardedLoaded = false;
-    userConsent;
+    personalizedAds;
 
     constructor() { }
 
@@ -47,20 +46,18 @@ export class AdsService {
             publisherId: 'pub-3572449953921317',                     // replace with your actual publisher ID
             tagUnderAgeOfConsent: false
         }).then(consentStatus => {
-            console.log(consentStatus);
-            if (consentStatus.consentStatus === 'PERSONALIZED') {
+            if (consentStatus === 'PERSONALIZED') {
                 this.personalizedAds = true;
-            } else if (consentStatus.consentStatus === 'NON-PERSONALIZED') {
+            } else if (consentStatus === 'NON_PERSONALIZED') {
                 this.personalizedAds = false;
-            } else if (consentStatus.consentStatus === 'UNKNOWN') {
+            } else if (consentStatus === 'UNKNOWN') {
                 this.showGoogleConsentForm();
             } else {
                 console.log('Consent Status: ' + consentStatus);
             }
         }, error => {
             console.error(error);
-        }
-        );
+        });
     }
 
     public showGoogleConsentForm() {
@@ -69,24 +66,15 @@ export class AdsService {
             showAdFreeOption: true
         }).then(consentStatus => {
             console.log(consentStatus);
-            if (consentStatus.consentStatus === 'PERSONALIZED') {
+            if (consentStatus === 'PERSONALIZED') {
                 this.personalizedAds = true;
+            } else if (consentStatus === 'NON_PERSONALIZED') {
+                this.personalizedAds = false;
+            } else if (consentStatus === 'ADFREE') {
+                console.log('User wishes to pay for Ad free version');
             } else {
                 this.personalizedAds = false;
             }
-            this.userConsent = consentStatus.consentStatus;
-        }, error => {
-            console.error(error);
-        });
-        this.updateAdExtras();
-    }
-
-    public setConsentStatus(adc) {
-        console.log(adc);
-        AdmobAdvanced.setConsentStatus({
-            consentStatus: adc
-        }).then(value => {
-            console.log(value);
         }, error => {
             console.error(error);
         });
@@ -101,14 +89,14 @@ export class AdsService {
         });
     }
 
-    public updateAdExtras() {
+    public updateAdExtras(persAds, chldDct, uAOC, mACR) {
         AdmobAdvanced.updateAdExtras({
-            personalizedAds: this.personalizedAds,
-            childDirected: false,
-            underAgeOfConsent: false,
-            maxAdContentRating: AdContentRating.MATURE_AUDIENCE
-        }).then(value => {
-            console.log(value);
+            personalizedAds: persAds,
+            childDirected: chldDct,
+            underAgeOfConsent: uAOC,
+            maxAdContentRating: mACR
+        }).then(consentStatus => {
+            console.log(consentStatus);
         }, error => {
             console.error(error);
         });

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AdsService } from '../services/ads.service';
-import { AdConsentStatus } from 'capacitor-admob-advanced';
+import { AdConsentStatus, AdContentRating } from 'capacitor-admob-advanced';
 
 @Component({
     selector: 'app-home',
@@ -48,10 +48,6 @@ export class HomePage {
     }
 
     public setConsentStatus() {
-        if (this.adsService.userConsent) {
-            this.adsService.setConsentStatus(AdConsentStatus.NON_PERSONALIZED);
-        } else {
-            this.adsService.setConsentStatus(AdConsentStatus.PERSONALIZED);
-        }
+        this.adsService.updateAdExtras(!this.adsService.personalizedAds, false, false, AdContentRating.MATURE_AUDIENCE);
     }
 }

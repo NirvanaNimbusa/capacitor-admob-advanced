@@ -89,10 +89,16 @@ public class AdmobAdvanced extends Plugin {
                 // User's consent status successfully updated.
 
                 if(tfua) {
-                    call.success(new JSObject().put("consentStatus", "NON-PERSONALIZED"));
+                    call.success(new JSObject().put("consentStatus", "NON_PERSONALIZED"));
                 } else {
                     if (ConsentInformation.getInstance(getContext()).isRequestLocationInEeaOrUnknown()) {
-                        call.success(new JSObject().put("consentStatus", consentStatus));
+                        if(consentStatus == ConsentStatus.PERSONALIZED){
+                            call.success(new JSObject().put("consentStatus", "PERSONALIZED"));
+                        } else if (consentStatus == ConsentStatus.NON_PERSONALIZED) {
+                            call.success(new JSObject().put("consentStatus", "NON_PERSONALIZED"));
+                        } else {
+                            call.success(new JSObject().put("consentStatus", "UNKNOWN"));
+                        }
                     } else {
                         call.success(new JSObject().put("consentStatus", "PERSONALIZED"));
                     }
@@ -130,7 +136,13 @@ public class AdmobAdvanced extends Plugin {
                                     if (userPrefersAdFree) {
                                         call.success(new JSObject().put("consentStatus", "ADFREE"));
                                     } else {
-                                        call.success(new JSObject().put("consentStatus", consentStatus));
+                                        if(consentStatus == ConsentStatus.PERSONALIZED){
+                                            call.success(new JSObject().put("consentStatus", "PERSONALIZED"));
+                                        } else if (consentStatus == ConsentStatus.NON_PERSONALIZED) {
+                                            call.success(new JSObject().put("consentStatus", "NON_PERSONALIZED"));
+                                        } else {
+                                            call.success(new JSObject().put("consentStatus", "UNKNOWN"));
+                                        }
                                     }
                                 }
 
@@ -189,7 +201,13 @@ public class AdmobAdvanced extends Plugin {
     @PluginMethod()
     public void updateAdExtras(final PluginCall call){
         this.call = call;
+        ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
         personalisedAds = call.getBoolean("personalizedAds", false);
+        if(personalisedAds) {
+            consentInformation.setConsentStatus(ConsentStatus.PERSONALIZED);
+        } else {
+            consentInformation.setConsentStatus(ConsentStatus.NON_PERSONALIZED);
+        }
         int childDirected = call.getBoolean("childDirected", false) ? 1 : 0;
         int underAgeOfConsent = call.getBoolean("underAgeOfConsent", false) ? 1 : 0;
         RequestConfiguration requestConfiguration = MobileAds.getRequestConfiguration()
@@ -199,21 +217,6 @@ public class AdmobAdvanced extends Plugin {
                 .setMaxAdContentRating(call.getString("maxAdContentRating", "MA"))
                 .build();
         MobileAds.setRequestConfiguration(requestConfiguration);
-        call.success(new JSObject().put("value", true));
-    }
-
-    @PluginMethod()
-    public void setConsentStatus(final PluginCall call) {
-        this.call = call;
-        ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
-        Toast.makeText(getContext(), call.getString("consentStatus"), Toast.LENGTH_SHORT).show();
-        if(call.getString("consentStatus") == "PERSONALIZED") {
-            consentInformation.setConsentStatus(ConsentStatus.PERSONALIZED);
-        } else if (call.getString("consentStatus") == "NON_PERSONALIZED") {
-            consentInformation.setConsentStatus(ConsentStatus.NON_PERSONALIZED);
-        } else {
-            call.error("Consent Status not set");
-        }
         call.success(new JSObject().put("consentStatus", consentInformation.getConsentStatus()));
     }
 
