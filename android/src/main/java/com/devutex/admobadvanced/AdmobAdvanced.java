@@ -49,10 +49,11 @@ public class AdmobAdvanced extends Plugin {
     private InterstitialAd interstitialAd;
     private RewardedVideoAd rewardedVideoAd;
     private String personalisedAds = "1";
+    private ConsentForm form;
 
     // Initialize Admob
     @PluginMethod()
-    public void initialise(final PluginCall call) {
+    public void initialize(final PluginCall call) {
         this.call = call;
         String appId = call.getString("appIdAndroid", "ca-app-pub-3940256099942544~3347511713");
         try {
@@ -66,7 +67,7 @@ public class AdmobAdvanced extends Plugin {
 
     // Initialize AdMob with Consent SDK
     @PluginMethod()
-    public void initialiseWithConsent(final PluginCall call) {
+    public void initializeWithConsent(final PluginCall call) {
         this.call = call;
         String appId = call.getString("appIdAndroid", "ca-app-pub-3940256099942544~3347511713");
         try {
@@ -113,7 +114,7 @@ public class AdmobAdvanced extends Plugin {
             e.printStackTrace();
         }
         if(call.getBoolean("showAdFreeOption", false)) {
-            final ConsentForm form = new ConsentForm.Builder(getContext(), privacyUrl)
+            form = new ConsentForm.Builder(this.getContext(), privacyUrl)
                     .withListener(new ConsentFormListener() {
                         @Override
                         public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
@@ -130,22 +131,21 @@ public class AdmobAdvanced extends Plugin {
                             // Consent form error.
                             call.error(errorDescription);
                         }
+
+                        @Override
+                        public void onConsentFormLoaded() {
+                            // Consent form error.
+                            form.show();
+                        }
                     })
                     .withPersonalizedAdsOption()
                     .withNonPersonalizedAdsOption()
                     .withAdFreeOption()
                     .build();
-
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    form.load();
-                    form.show();
-                }
-            });
+            form.load();
 
         } else {
-            final ConsentForm form = new ConsentForm.Builder(getActivity().getApplicationContext(), privacyUrl)
+            form = new ConsentForm.Builder(this.getContext(), privacyUrl)
                     .withListener(new ConsentFormListener() {
                         @Override
                         public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
@@ -158,18 +158,18 @@ public class AdmobAdvanced extends Plugin {
                             // Consent form error.
                             call.error(errorDescription);
                         }
+
+                        @Override
+                        public void onConsentFormLoaded() {
+                            // Consent form error.
+                            form.show();
+                        }
                     })
                     .withPersonalizedAdsOption()
                     .withNonPersonalizedAdsOption()
                     .build();
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    form.load();
-                    form.show();
-                }
-            });
+            form.load();
         }
     }
 
