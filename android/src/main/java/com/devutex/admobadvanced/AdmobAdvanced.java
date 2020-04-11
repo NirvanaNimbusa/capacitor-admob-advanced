@@ -1,6 +1,7 @@
 package com.devutex.admobadvanced;
 
 import android.Manifest;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -114,11 +115,12 @@ public class AdmobAdvanced extends Plugin {
             e.printStackTrace();
         }
         final URL URLtoPass = privacyUrl;
+        final Context context = this.getContext();
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if(call.getBoolean("showAdFreeOption", false)) {
-                    form = new ConsentForm.Builder(getActivity().getApplicationContext(), URLtoPass)
+                    form = new ConsentForm.Builder(context, URLtoPass)
                             .withListener(new ConsentFormListener() {
                                 @Override
                                 public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
@@ -153,7 +155,7 @@ public class AdmobAdvanced extends Plugin {
                             .build();
                     form.load();
                 } else {
-                    form = new ConsentForm.Builder(getActivity().getApplicationContext(), URLtoPass)
+                    form = new ConsentForm.Builder(context, URLtoPass)
                             .withListener(new ConsentFormListener() {
                                 @Override
                                 public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
