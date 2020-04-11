@@ -113,7 +113,7 @@ public class AdmobAdvanced extends Plugin {
             e.printStackTrace();
         }
         if(call.getBoolean("showAdFreeOption", false)) {
-            ConsentForm form = new ConsentForm.Builder(getContext(), privacyUrl)
+            final ConsentForm form = new ConsentForm.Builder(getContext(), privacyUrl)
                     .withListener(new ConsentFormListener() {
                         @Override
                         public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
@@ -135,10 +135,17 @@ public class AdmobAdvanced extends Plugin {
                     .withNonPersonalizedAdsOption()
                     .withAdFreeOption()
                     .build();
-            form.load();
-            form.show();
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    form.load();
+                    form.show();
+                }
+            });
+
         } else {
-            ConsentForm form = new ConsentForm.Builder(getContext(), privacyUrl)
+            final ConsentForm form = new ConsentForm.Builder(getActivity().getApplicationContext(), privacyUrl)
                     .withListener(new ConsentFormListener() {
                         @Override
                         public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
@@ -155,8 +162,14 @@ public class AdmobAdvanced extends Plugin {
                     .withPersonalizedAdsOption()
                     .withNonPersonalizedAdsOption()
                     .build();
-            form.load();
-            form.show();
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    form.load();
+                    form.show();
+                }
+            });
         }
     }
 
