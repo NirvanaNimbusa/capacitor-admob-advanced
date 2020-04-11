@@ -113,74 +113,73 @@ public class AdmobAdvanced extends Plugin {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        if(call.getBoolean("showAdFreeOption", false)) {
-            form = new ConsentForm.Builder(this.getContext(), privacyUrl)
-                    .withListener(new ConsentFormListener() {
-                        @Override
-                        public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
-                            // Consent form was closed.
-                            if (userPrefersAdFree) {
-                                call.success(new JSObject().put("consentStatus", "ADFREE"));
-                            } else {
-                                call.success(new JSObject().put("consentStatus", consentStatus));
-                            }
-                        }
-
-                        @Override
-                        public void onConsentFormError(String errorDescription) {
-                            // Consent form error.
-                            call.error(errorDescription);
-                        }
-
-                        @Override
-                        public void onConsentFormLoaded() {
-                            // Consent form error.
-                            getActivity().runOnUiThread(new Runnable() {
+        final URL URLtoPass = privacyUrl;
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(call.getBoolean("showAdFreeOption", false)) {
+                    form = new ConsentForm.Builder(getActivity().getApplicationContext(), URLtoPass)
+                            .withListener(new ConsentFormListener() {
                                 @Override
-                                public void run() {
+                                public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
+                                    // Consent form was closed.
+                                    if (userPrefersAdFree) {
+                                        call.success(new JSObject().put("consentStatus", "ADFREE"));
+                                    } else {
+                                        call.success(new JSObject().put("consentStatus", consentStatus));
+                                    }
+                                }
+
+                                @Override
+                                public void onConsentFormError(String errorDescription) {
+                                    // Consent form error.
+                                    call.error(errorDescription);
+                                }
+
+                                @Override
+                                public void onConsentFormLoaded() {
+                                    // Consent form error.
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            form.show();
+                                        }
+                                    });
+                                }
+                            })
+                            .withPersonalizedAdsOption()
+                            .withNonPersonalizedAdsOption()
+                            .withAdFreeOption()
+                            .build();
+                    form.load();
+                } else {
+                    form = new ConsentForm.Builder(getActivity().getApplicationContext(), URLtoPass)
+                            .withListener(new ConsentFormListener() {
+                                @Override
+                                public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
+                                    // Consent form was closed.
+                                    call.success(new JSObject().put("consentStatus", consentStatus));
+                                }
+
+                                @Override
+                                public void onConsentFormError(String errorDescription) {
+                                    // Consent form error.
+                                    call.error(errorDescription);
+                                }
+
+                                @Override
+                                public void onConsentFormLoaded() {
+                                    // Consent form error.
                                     form.show();
                                 }
-                            });
-                        }
-                    })
-                    .withPersonalizedAdsOption()
-                    .withNonPersonalizedAdsOption()
-                    .withAdFreeOption()
-                    .build();
-            form.load();
-
-        } else {
-            form = new ConsentForm.Builder(this.getContext(), privacyUrl)
-                    .withListener(new ConsentFormListener() {
-                        @Override
-                        public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
-                            // Consent form was closed.
-                            call.success(new JSObject().put("consentStatus", consentStatus));
-                        }
-
-                        @Override
-                        public void onConsentFormError(String errorDescription) {
-                            // Consent form error.
-                            call.error(errorDescription);
-                        }
-
-                        @Override
-                        public void onConsentFormLoaded() {
-                            // Consent form error.
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    form.show();
-                                }
-                            });
-                        }
-                    })
-                    .withPersonalizedAdsOption()
-                    .withNonPersonalizedAdsOption()
-                    .build();
-
-            form.load();
-        }
+                            })
+                            .withPersonalizedAdsOption()
+                            .withNonPersonalizedAdsOption()
+                            .build();
+                    form.load();
+                }
+            }
+        });
     }
 
     @PluginMethod()
