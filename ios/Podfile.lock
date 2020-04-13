@@ -34,11 +34,11 @@ PODS:
 
 DEPENDENCIES:
   - "Capacitor (from `../node_modules/@capacitor/ios`)"
-  - "CapacitorCordova (from `../node_modules/@capacitor/ios`)"
   - Google-Mobile-Ads-SDK
 
 SPEC REPOS:
   trunk:
+    - CapacitorCordova
     - Google-Mobile-Ads-SDK
     - GoogleAppMeasurement
     - GoogleUtilities
@@ -46,8 +46,6 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   Capacitor:
-    :path: "../node_modules/@capacitor/ios"
-  CapacitorCordova:
     :path: "../node_modules/@capacitor/ios"
 
 SPEC CHECKSUMS:
@@ -58,6 +56,6 @@ SPEC CHECKSUMS:
   GoogleUtilities: ad0f3b691c67909d03a3327cc205222ab8f42e0e
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
 
-PODFILE CHECKSUM: fb443a7cf43eee69edd3e5355e4f323c97c77c8c
+PODFILE CHECKSUM: a7c9efeb3cc4fa019fcdc0bf8a28da4727b6276e
 
 COCOAPODS: 1.9.1
