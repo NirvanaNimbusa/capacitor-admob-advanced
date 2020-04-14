@@ -71,27 +71,31 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     }
     
     @objc func updateAdExtras(_ call: CAPPluginCall) {
-        PACConsentInformation.sharedInstance.isTaggedForUnderAgeOfConsent = call.getBool("underAgeOfConsent") ?? false
-        GADMobileAds.sharedInstance().requestConfiguration.tag(forChildDirectedTreatment: call.getBool("childDirected") ?? false)
-        switch(call.getString("maxAdContentRating") ?? "MA") {
-        case "G":
-            GADMobileAds.sharedInstance().requestConfiguration.maxAdContentRating = GADMaxAdContentRating.general
-            break;
-        case "PG":
-            GADMobileAds.sharedInstance().requestConfiguration.maxAdContentRating = GADMaxAdContentRating.parentalGuidance
-            break;
-        case "T":
-            GADMobileAds.sharedInstance().requestConfiguration.maxAdContentRating = GADMaxAdContentRating.teen
-            break;
-        default:
-            GADMobileAds.sharedInstance().requestConfiguration.maxAdContentRating = GADMaxAdContentRating.matureAudience
-            break;
+        DispatchQueue.main.async {
+            PACConsentInformation.sharedInstance.isTaggedForUnderAgeOfConsent = call.getBool("underAgeOfConsent") ?? false
+            GADMobileAds.sharedInstance().requestConfiguration.tag(forChildDirectedTreatment: call.getBool("childDirected") ?? false)
+            switch(call.getString("maxAdContentRating") ?? "MA") {
+            case "G":
+                GADMobileAds.sharedInstance().requestConfiguration.maxAdContentRating = GADMaxAdContentRating.general
+                break;
+            case "PG":
+                GADMobileAds.sharedInstance().requestConfiguration.maxAdContentRating = GADMaxAdContentRating.parentalGuidance
+                break;
+            case "T":
+                GADMobileAds.sharedInstance().requestConfiguration.maxAdContentRating = GADMaxAdContentRating.teen
+                break;
+            default:
+                GADMobileAds.sharedInstance().requestConfiguration.maxAdContentRating = GADMaxAdContentRating.matureAudience
+                break;
+            }
         }
     }
     
     @objc func getAdProviders(_ call: CAPPluginCall) {
-        let adProviders = PACConsentInformation.sharedInstance.adProviders
-        call.success(["adProviders": adProviders as Any])
+        DispatchQueue.main.async {
+            let adProviders = PACConsentInformation.sharedInstance.adProviders
+            call.success(["adProviders": adProviders as Any])
+        }
     }
 
     @objc func showBanner(_ call: CAPPluginCall) {
