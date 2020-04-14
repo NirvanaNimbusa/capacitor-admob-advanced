@@ -21,23 +21,23 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     }
     
     @objc func initializeWithConsent(_ call: CAPPluginCall) {
-        let appId = call.getString("appIdIos") ?? "ca-app-pub-6564742920318187~7217030993"
-        //GADMobileAds.sharedInstance().start(completionHandler: nil)
-        let pubId = call.getString("publisherId") ?? "pub-0123456789012345"
-        PACConsentInformation.sharedInstance.requestConsentInfoUpdate(forPublisherIdentifiers: [pubId]) {(_ error: Error?) -> Void in
-            if let error = error {
-                //Consent info update failed.
-                call.error("Consent Information failed to load:" + error.localizedDescription)
-            } else {
-                //Consent info update succeeded.
-                if PACConsentInformation.sharedInstance.isRequestLocationInEEAOrUnknown {
-                    call.success([ "consentStatus": PACConsentInformation.sharedInstance.consentStatus])
+        DispatchQueue.main.async {
+            let appId = call.getString("appIdIos") ?? "ca-app-pub-6564742920318187~7217030993"
+            //GADMobileAds.sharedInstance().start(completionHandler: nil)
+            let pubId = call.getString("publisherId") ?? "pub-0123456789012345"
+            PACConsentInformation.sharedInstance.requestConsentInfoUpdate(forPublisherIdentifiers: [pubId]) {(_ error: Error?) -> Void in
+                if let error = error {
+                    //Consent info update failed.
+                    call.error("Consent Information failed to load:" + error.localizedDescription)
                 } else {
-                    call.success(["consentStatus": "PERSONALIZED"])
+                    //Consent info update succeeded.
+                    if PACConsentInformation.sharedInstance.isRequestLocationInEEAOrUnknown {
+                        call.success([ "consentStatus": PACConsentInformation.sharedInstance.consentStatus])
+                    } else {
+                        call.success(["consentStatus": "PERSONALIZED"])
+                    }
                 }
-                
             }
-            
         }
     }
     
