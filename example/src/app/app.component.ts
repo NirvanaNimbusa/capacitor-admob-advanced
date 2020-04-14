@@ -24,7 +24,7 @@ export class AppComponent {
 
     initialiseApp() {
         this.platform.ready().then(() => {
-            this.adsService.initialise();
+            this.adsService.initializeWithConsent();
             this.statusBar.styleDefault();
             this.splashScreen.hide();
         });
