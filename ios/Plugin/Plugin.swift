@@ -12,7 +12,7 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     var bannerView: GADBannerView!
     var interstitial: GADInterstitial!
     var rewardedAd: GADRewardedAd!
-    var personalizedAds: Bool!
+    var personalizedAds: Bool = false
     
     @objc func initialize(_ call: CAPPluginCall) {
         let appId = call.getString("appIdIos") ?? "ca-app-pub-6564742920318187~7217030993"
@@ -32,7 +32,16 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
                 } else {
                     //Consent info update succeeded.
                     if PACConsentInformation.sharedInstance.isRequestLocationInEEAOrUnknown {
+                        if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.unknown {
+                            NSLog("Unknown")
+                        } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.personalized {
+                            NSLog("personalized")
+                        } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.nonPersonalized {
+                            NSLog("non-personalized")
+                        }
+                        
                         call.success([ "consentStatus": PACConsentInformation.sharedInstance.consentStatus])
+                        
                     } else {
                         call.success(["consentStatus": "PERSONALIZED"])
                     }
@@ -289,7 +298,7 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     
     // Intertitial AD Implementation
     
-    @objc func prepareInterstitial(_ call: CAPPluginCall) {
+    @objc func loadInterstitial(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
             let adUnitID = call.getString("adId") ?? "ca-app-pub-3940256099942544/4411468910"
             
@@ -365,7 +374,7 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     
     // Reward AD Implementation
     
-    @objc func prepareRewardVideoAd(_ call: CAPPluginCall) {
+    @objc func loadRewarded(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
             let adUnitID: String = call.getString("adId") ?? "ca-app-pub-3940256099942544/1712485313"
             
@@ -395,12 +404,10 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
                     }
                 }
             }
-            
-            
         }
     }
     
-    @objc func showRewardVideoAd(_ call: CAPPluginCall) {
+    @objc func showRewarded(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
             if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
                 if self.rewardedAd?.isReady == true {
@@ -436,3 +443,4 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     }
 
 }
+
