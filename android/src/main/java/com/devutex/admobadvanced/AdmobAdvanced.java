@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
+import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
@@ -31,6 +33,10 @@ import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.ads.consent.ConsentInfoUpdateListener;
 import com.google.ads.consent.ConsentInformation;
 import com.google.ads.consent.ConsentStatus;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -211,7 +217,15 @@ public class AdmobAdvanced extends Plugin {
     public void getAdProviders(final PluginCall call) {
         this.call = call;
         List<AdProvider> adProviders = ConsentInformation.getInstance(getContext()).getAdProviders();
-        call.success(new JSObject().put("adProviders", adProviders));
+        JSArray list = new JSArray();
+        for(AdProvider provider: adProviders) {
+            JSObject json = new JSObject();
+            json.put("id", provider.getId());
+            json.put("name", provider.getName());
+            json.put("privacyPolicyURL", provider.getPrivacyPolicyUrlString());
+            list.put(json);
+        }
+        call.success(new JSObject().put("adProviders", list));
     }
 
     public AdRequest buildAdRequest() {
