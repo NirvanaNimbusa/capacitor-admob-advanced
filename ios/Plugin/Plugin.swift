@@ -16,13 +16,13 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     
     @objc func initialize(_ call: CAPPluginCall) {
         let appId = call.getString("appIdIos") ?? "ca-app-pub-6564742920318187~7217030993"
-        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        //GADMobileAds.sharedInstance().start(completionHandler: nil)
         call.success([ "value": appId ])
     }
     
     @objc func initializeWithConsent(_ call: CAPPluginCall) {
         let appId = call.getString("appIdIos") ?? "ca-app-pub-6564742920318187~7217030993"
-        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        //GADMobileAds.sharedInstance().start(completionHandler: nil)
         let pubId = call.getString("publisherId") ?? "pub-0123456789012345"
         PACConsentInformation.sharedInstance.requestConsentInfoUpdate(forPublisherIdentifiers: [pubId]) {(_ error: Error?) -> Void in
             if let error = error {
