@@ -1,6 +1,6 @@
 {
   "name": "capacitor-admob-advanced",
-  "version": "0.3.19",
+  "version": "0.4.2",
   "description": "A capacitor plugin for iOS and Android to integrate Google Admob into your app with extra features.",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
