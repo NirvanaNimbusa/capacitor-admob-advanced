@@ -386,12 +386,12 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     
     @objc func loadRewarded(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
-            let adUnitID: String = call.getString("adIdIos") ?? "ca-app-pub-3940256099942544/1712485313"
+            var adId: String = call.getString("adIdIos") ?? "ca-app-pub-3940256099942544/1712485313"
             let isTesting = call.getBool("isTesting") ?? false
             if (isTesting) {
                 adId = "ca-app-pub-3940256099942544/1712485313";
             }
-            self.rewardedAd = GADRewardedAd(adUnitID: adUnitID)
+            self.rewardedAd = GADRewardedAd(adUnitID: adId)
             if self.personalizedAds {
                 self.rewardedAd?.load(GADRequest()) { error in
                     if let error = error {
