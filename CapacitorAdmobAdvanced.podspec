@@ -12,4 +12,5 @@
     s.static_framework = true
     s.dependency 'Capacitor'
     s.dependency 'Google-Mobile-Ads-SDK'
+    s.dependency 'PersonalizedAdConsent'
   end

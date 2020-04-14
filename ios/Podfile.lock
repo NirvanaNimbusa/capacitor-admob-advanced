@@ -31,10 +31,12 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
+  - PersonalizedAdConsent (1.0.5)
 
 DEPENDENCIES:
   - "Capacitor (from `../node_modules/@capacitor/ios`)"
   - Google-Mobile-Ads-SDK
+  - PersonalizedAdConsent
 
 SPEC REPOS:
   trunk:
@@ -43,6 +45,7 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleUtilities
     - nanopb
+    - PersonalizedAdConsent
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -55,7 +58,8 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: e49be3954045b17d046f271b9cc1ec052bad9702
   GoogleUtilities: ad0f3b691c67909d03a3327cc205222ab8f42e0e
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
+  PersonalizedAdConsent: dbecabb3467df967c16d9cebc2ef4a8890e4bbd8
 
-PODFILE CHECKSUM: a7c9efeb3cc4fa019fcdc0bf8a28da4727b6276e
+PODFILE CHECKSUM: 0ebf7c788d23ecfa95b3869a665605f6fc873535
 
 COCOAPODS: 1.9.1

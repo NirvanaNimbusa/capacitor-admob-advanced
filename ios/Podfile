@@ -5,6 +5,7 @@ target 'Plugin' do
   use_frameworks!
   pod 'Capacitor', :path => '../node_modules/@capacitor/ios'
   pod 'Google-Mobile-Ads-SDK'
+  pod 'PersonalizedAdConsent'
 end
 
 target 'PluginTests' do
@@ -12,4 +13,5 @@ target 'PluginTests' do
 
   pod 'Capacitor', :path => '../node_modules/@capacitor/ios'
   pod 'Google-Mobile-Ads-SDK'
+  pod 'PersonalizedAdConsent'
 end
