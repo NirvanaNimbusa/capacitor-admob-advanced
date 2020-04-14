@@ -28,7 +28,7 @@ export interface AdmobAdvancedPlugin {
         showAdFreeOption: boolean
     }): Promise<{ consentStatus: string }>
 
-    getAdProviders(): Promise<{ adProviders: string[] }>
+    getAdProviders(): Promise<{ adProviders: any[] }>
 
     updateAdExtras(options: {
         consentStatus: boolean,
