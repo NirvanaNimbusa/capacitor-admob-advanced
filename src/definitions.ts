@@ -37,8 +37,8 @@ export interface AdmobAdvancedPlugin {
 
     updateAdExtras(options: {
         consentStatus: AdConsentStatus,
-        childDirected: boolean,
-        underAgeOfConsent: boolean,
+        childDirected: AdChildDirected,
+        underAgeOfConsent: AdUnderAge,
         maxAdContentRating: AdContentRating
     }): Promise<{
         consentStatus: string,
@@ -98,6 +98,18 @@ export interface AdmobAdvancedPlugin {
     addListener(eventName: 'onRewardedVideoAdFailedToLoad', listenerFunc: (info: any) => void): PluginListenerHandle;
     addListener(eventName: 'onRewardedVideoCompleted', listenerFunc: (info: any) => void): PluginListenerHandle;
 
+}
+
+export enum AdUnderAge {
+    TRUE = 'TRUE',
+    FALSE = 'FALSE',
+    UNSPECIFIED = 'UNSPECIFIED'
+}
+
+export enum AdChildDirected {
+    TRUE = 'TRUE',
+    FALSE = 'FALSE',
+    UNSPECIFIED = 'UNSPECIFIED'
 }
 
 export enum AdConsentStatus {

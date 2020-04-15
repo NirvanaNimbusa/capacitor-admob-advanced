@@ -37,6 +37,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_FALSE;
+import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE;
+import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_UNSPECIFIED;
+import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE;
+
 
 @NativePlugin(
     permissions = {
@@ -93,12 +98,27 @@ public class AdmobAdvanced extends Plugin {
                     } else {
                         personalisedAds = false;
                     }
-                    //call.success(new JSObject().put("consentStatus", consentStatus));
                     returnJson.put("consentStatus", consentStatus);
                 } else {
-                    //call.success(new JSObject().put("consentStatus", "PERSONALIZED"));
                     returnJson.put("consentStatus", "PERSONALIZED");
                 }
+                RequestConfiguration requestConfiguration = MobileAds.getRequestConfiguration();
+                if(requestConfiguration.getTagForChildDirectedTreatment() == TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE) {
+                    returnJson.put("childDirected", true);
+                } else if (requestConfiguration.getTagForChildDirectedTreatment() == RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_FALSE){
+                    returnJson.put("childDirected", false);
+                } else {
+                    returnJson.put("childDirected", "UNSPECIFIED");
+                }
+                if(requestConfiguration.getTagForUnderAgeOfConsent() == RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE) {
+                    returnJson.put("underAgeOfConsent", true);
+                } else if (requestConfiguration.getTagForUnderAgeOfConsent() == RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_FALSE){
+                    returnJson.put("underAgeOfConsent", false);
+                } else {
+                    returnJson.put("underAgeOfConsent", "UNSPECIFIED");
+                }
+                returnJson.put("maxAdContentRating", requestConfiguration.getMaxAdContentRating());
+                call.success(returnJson);
             }
 
             @Override
@@ -107,23 +127,7 @@ public class AdmobAdvanced extends Plugin {
                 call.error(errorDescription);
             }
         });
-        RequestConfiguration requestConfiguration = MobileAds.getRequestConfiguration();
-        if(requestConfiguration.getTagForChildDirectedTreatment() == RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE) {
-            returnJson.put("childDirected", true);
-        } else if (requestConfiguration.getTagForChildDirectedTreatment() == RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_FALSE){
-            returnJson.put("childDirected", false);
-        } else {
-            returnJson.put("childDirected", "UNSPECIFIED");
-        }
-        if(requestConfiguration.getTagForUnderAgeOfConsent() == RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE) {
-            returnJson.put("underAgeOfConsent", true);
-        } else if (requestConfiguration.getTagForUnderAgeOfConsent() == RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_FALSE){
-            returnJson.put("underAgeOfConsent", false);
-        } else {
-            returnJson.put("underAgeOfConsent", "UNSPECIFIED");
-        }
-        returnJson.put("maxAdContentRating", requestConfiguration.getMaxAdContentRating());
-        call.success(returnJson);
+
     }
 
     @PluginMethod()
@@ -225,18 +229,34 @@ public class AdmobAdvanced extends Plugin {
             consentInformation.setConsentStatus(ConsentStatus.UNKNOWN);
             personalisedAds = false;
         }
-        int childDirected = call.getBoolean("childDirected", false) ? 1 : 0;
-        int underAgeOfConsent = call.getBoolean("underAgeOfConsent", false) ? 1 : 0;
+        String childDirected = call.getString("childDirected", "UNSPECIFIED");
+        int chldDctd;
+        if(childDirected.equals("TRUE")) {
+            chldDctd = TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE;
+        } else if (childDirected.equals("FALSE")) {
+            chldDctd = TAG_FOR_CHILD_DIRECTED_TREATMENT_FALSE;
+        } else {
+            chldDctd = TAG_FOR_CHILD_DIRECTED_TREATMENT_UNSPECIFIED;
+        }
+        String underAgeOfConsent = call.getString("underAgeOfConsent", "UNSPECIFIED");
+        int uAOC;
+        if(underAgeOfConsent.equals("TRUE")){
+            uAOC = TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE;
+        } else if(underAgeOfConsent.equals("FALSE")) {
+            uAOC = TAG_FOR_CHILD_DIRECTED_TREATMENT_FALSE;
+        } else {
+            uAOC = TAG_FOR_CHILD_DIRECTED_TREATMENT_UNSPECIFIED;
+        }
         RequestConfiguration requestConfiguration = MobileAds.getRequestConfiguration()
                 .toBuilder()
-                .setTagForChildDirectedTreatment(childDirected)
-                .setTagForUnderAgeOfConsent(underAgeOfConsent)
+                .setTagForChildDirectedTreatment(chldDctd)
+                .setTagForUnderAgeOfConsent(uAOC)
                 .setMaxAdContentRating(call.getString("maxAdContentRating", "MA"))
                 .build();
         MobileAds.setRequestConfiguration(requestConfiguration);
         JSObject json = new JSObject();
         json.put("consentStatus", consentInformation.getConsentStatus());
-        if(requestConfiguration.getTagForChildDirectedTreatment() == RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE) {
+        if(requestConfiguration.getTagForChildDirectedTreatment() == TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE) {
             json.put("childDirected", true);
         } else if (requestConfiguration.getTagForChildDirectedTreatment() == RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_FALSE){
             json.put("childDirected", false);
