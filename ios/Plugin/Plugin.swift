@@ -26,22 +26,30 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
                     //Consent info update failed.
                     call.error("Consent Information failed to load:" + error.localizedDescription)
                 } else {
+                    var consentStatus: String;
                     //Consent info update succeeded.
                     if PACConsentInformation.sharedInstance.isRequestLocationInEEAOrUnknown {
-                        if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.unknown {
-                            self.personalizedAds = false
-                            call.success(["consentStatus": "UNKNOWN"])
-                        } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.personalized {
+                        if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.personalized {
                             self.personalizedAds = true
-                            call.success(["consentStatus": "PERSONALIZED"])
+                            consentStatus = "PERSONALIZED"
                         } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.nonPersonalized {
                             self.personalizedAds = false
-                            call.success(["consentStatus": "NON_PERSONALIZED"])
+                            consentStatus = "NON_PERSONALIZED"
+                        } else {
+                            self.personalizedAds = false
+                            consentStatus = "UNKNOWN"
                         }
                     } else {
-                        call.success(["consentStatus": "PERSONALIZED"])
+                        consentStatus = "UNKNOWN"
                         self.personalizedAds = true
                     }
+                    let object = [
+                        "consentStatus": consentStatus,
+                        "childDirected": "UNKNOWN",
+                        "underAgeOfConsent": PACConsentInformation.sharedInstance.isTaggedForUnderAgeOfConsent,
+                        "maxAdContentRating": GADMobileAds.sharedInstance().requestConfiguration.maxAdContentRating
+                        ] as [String : Any]
+                    call.success(object)
                 }
             }
         }
@@ -86,7 +94,7 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     
     @objc func updateAdExtras(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
-            let consentStatus = call.getString("consentStatus") ?? "UNKNOWN"
+            var consentStatus = call.getString("consentStatus") ?? "UNKNOWN"
             if consentStatus == "PERSONALIZED" {
                 self.personalizedAds = true
                 PACConsentInformation.sharedInstance.consentStatus = .personalized
@@ -97,8 +105,22 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
                 self.personalizedAds = false
                 PACConsentInformation.sharedInstance.consentStatus = .unknown
             }
-            PACConsentInformation.sharedInstance.isTaggedForUnderAgeOfConsent = call.getBool("underAgeOfConsent") ?? false
-            GADMobileAds.sharedInstance().requestConfiguration.tag(forChildDirectedTreatment: call.getBool("childDirected") ?? false)
+            let childDirected = call.getString("childDirected") ?? "UNSPECIFIED"
+            if childDirected == "TRUE"{
+                GADMobileAds.sharedInstance().requestConfiguration.tag(forChildDirectedTreatment: true)
+            } else if childDirected == "FALSE" {
+                GADMobileAds.sharedInstance().requestConfiguration.tag(forChildDirectedTreatment: false)
+            } else {
+                // Don't tag
+            }
+            let underAgeOfConsent = call.getString("underAgeOfConsent") ?? "UNSPECIFIED"
+            if underAgeOfConsent == "TRUE"{
+                PACConsentInformation.sharedInstance.isTaggedForUnderAgeOfConsent = true
+            } else if underAgeOfConsent == "FALSE" {
+                PACConsentInformation.sharedInstance.isTaggedForUnderAgeOfConsent = false
+            } else {
+                // Don't tag
+            }
             switch(call.getString("maxAdContentRating") ?? "MA") {
             case "G":
                 GADMobileAds.sharedInstance().requestConfiguration.maxAdContentRating = GADMaxAdContentRating.general
@@ -114,14 +136,22 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
                 break;
             }
             if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.unknown {
-                call.success(["consentStatus": "UNKNOWN"])
+                consentStatus = "UNKNOWN"
+                self.personalizedAds = false
             } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.personalized {
                 self.personalizedAds = true
-                call.success(["consentStatus": "PERSONALIZED"])
+                consentStatus = "PERSONALIZED"
             } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.nonPersonalized {
                 self.personalizedAds = false
-                call.success(["consentStatus": "NON_PERSONALIZED"])
+                consentStatus = "NON_PERSONALIZED"
             }
+            let object = [
+                "consentStatus": consentStatus,
+                "childDirected": "UNKNOWN",
+                "underAgeOfConsent": PACConsentInformation.sharedInstance.isTaggedForUnderAgeOfConsent,
+                "maxAdContentRating": GADMobileAds.sharedInstance().requestConfiguration.maxAdContentRating
+                ] as [String : Any]
+            call.success(object)
         }
     }
     
@@ -481,5 +511,6 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     }
 
 }
+
 
 
