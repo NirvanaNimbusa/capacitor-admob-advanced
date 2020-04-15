@@ -7,8 +7,6 @@
   "cordova": {},
   "server": {
     "cleartext": true,
-    "originalCleartext": true,
-    "url": "http://192.168.0.50:8101",
-    "originalUrl": "http://localhost:8100"
+    "url": "http://192.168.0.15:8100"
   }
 }
