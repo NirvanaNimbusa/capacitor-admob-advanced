@@ -3,21 +3,17 @@ import Capacitor
 import GoogleMobileAds
 import PersonalizedAdConsent
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitor.ionicframework.com/docs/plugins/ios
- */
 @objc(AdmobAdvanced)
 public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDelegate, GADRewardedAdDelegate {
     var bannerView: GADBannerView!
     var interstitial: GADInterstitial!
     var rewardedAd: GADRewardedAd!
-    var personalizedAds: Bool = false
+    var personalizedAds: Bool!
     
     @objc func initialize(_ call: CAPPluginCall) {
         let appId = call.getString("appIdIos") ?? "ca-app-pub-6564742920318187~7217030993"
         GADMobileAds.sharedInstance().start(completionHandler: nil)
-        call.success([ "value": appId ])
+        call.success([ "value": true ])
     }
     
     @objc func initializeWithConsent(_ call: CAPPluginCall) {
@@ -33,14 +29,18 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
                     //Consent info update succeeded.
                     if PACConsentInformation.sharedInstance.isRequestLocationInEEAOrUnknown {
                         if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.unknown {
+                            self.personalizedAds = false
                             call.success(["consentStatus": "UNKNOWN"])
                         } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.personalized {
+                            self.personalizedAds = true
                             call.success(["consentStatus": "PERSONALIZED"])
                         } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.nonPersonalized {
+                            self.personalizedAds = false
                             call.success(["consentStatus": "NON_PERSONALIZED"])
                         }
                     } else {
                         call.success(["consentStatus": "PERSONALIZED"])
+                        self.personalizedAds = true
                     }
                 }
             }
@@ -68,10 +68,13 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
                             call.success(["consentStatus": "ADFREE"])
                         } else {
                             if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.unknown {
+                                self.personalizedAds = false
                                 call.success(["consentStatus": "UNKNOWN"])
                             } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.personalized {
+                                self.personalizedAds = true
                                 call.success(["consentStatus": "PERSONALIZED"])
                             } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.nonPersonalized {
+                                self.personalizedAds = false
                                 call.success(["consentStatus": "NON_PERSONALIZED"])
                             }
                         }
@@ -83,11 +86,16 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     
     @objc func updateAdExtras(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
-            self.personalizedAds = call.getBool("personalizedAds") ?? false
-            if self.personalizedAds {
+            let consentStatus = call.getString("consentStatus") ?? "UNKNOWN"
+            if consentStatus == "PERSONALIZED" {
+                self.personalizedAds = true
                 PACConsentInformation.sharedInstance.consentStatus = .personalized
-            } else {
+            } else if consentStatus == "NON_PERSONALIZED" {
+                self.personalizedAds = false
                 PACConsentInformation.sharedInstance.consentStatus = .nonPersonalized
+            } else {
+                self.personalizedAds = false
+                PACConsentInformation.sharedInstance.consentStatus = .unknown
             }
             PACConsentInformation.sharedInstance.isTaggedForUnderAgeOfConsent = call.getBool("underAgeOfConsent") ?? false
             GADMobileAds.sharedInstance().requestConfiguration.tag(forChildDirectedTreatment: call.getBool("childDirected") ?? false)
@@ -105,13 +113,30 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
                 GADMobileAds.sharedInstance().requestConfiguration.maxAdContentRating = GADMaxAdContentRating.matureAudience
                 break;
             }
+            if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.unknown {
+                call.success(["consentStatus": "UNKNOWN"])
+            } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.personalized {
+                self.personalizedAds = true
+                call.success(["consentStatus": "PERSONALIZED"])
+            } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.nonPersonalized {
+                self.personalizedAds = false
+                call.success(["consentStatus": "NON_PERSONALIZED"])
+            }
         }
     }
     
     @objc func getAdProviders(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
-            let adProviders = PACConsentInformation.sharedInstance.adProviders
-            let list: [PACAdProvider] = adProviders!
+            let adProviders: [PACAdProvider] = PACConsentInformation.sharedInstance.adProviders!
+            var list = [[String: String]]()
+            for item in adProviders {
+                let object = [
+                    "id": item.identifier.stringValue,
+                    "name": item.name,
+                    "privacyPolicyURL": item.privacyPolicyURL.absoluteString
+                    ]
+                list.append(object)
+            }
             call.success(["adProviders": list])
         }
     }
@@ -456,4 +481,5 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     }
 
 }
+
 

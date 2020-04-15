@@ -31,7 +31,7 @@ export interface AdmobAdvancedPlugin {
     getAdProviders(): Promise<{ adProviders: any[] }>
 
     updateAdExtras(options: {
-        consentStatus: boolean,
+        consentStatus: AdConsentStatus,
         childDirected: boolean,
         underAgeOfConsent: boolean,
         maxAdContentRating: AdContentRating
@@ -88,6 +88,12 @@ export interface AdmobAdvancedPlugin {
     addListener(eventName: 'onRewardedVideoAdFailedToLoad', listenerFunc: (info: any) => void): PluginListenerHandle;
     addListener(eventName: 'onRewardedVideoCompleted', listenerFunc: (info: any) => void): PluginListenerHandle;
 
+}
+
+export enum AdConsentStatus {
+    PERSONALIZED = 'PERSONALIZED',
+    NON_PERSONALIZED = 'NON_PERSONALIZED',
+    UNKNOWN = 'UNKNOWN'
 }
 
 export enum AdContentRating {

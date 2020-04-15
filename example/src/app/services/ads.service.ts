@@ -99,9 +99,9 @@ export class AdsService {
         });
     }
 
-    public updateAdExtras(persAds, chldDct, uAOC, mACR) {
+    public updateAdExtras(conStat, chldDct, uAOC, mACR) {
         AdmobAdvanced.updateAdExtras({
-            personalizedAds: persAds,
+            consentStatus: conStat,
             childDirected: chldDct,
             underAgeOfConsent: uAOC,
             maxAdContentRating: mACR
