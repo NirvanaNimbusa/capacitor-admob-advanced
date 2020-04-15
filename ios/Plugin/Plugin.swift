@@ -3,21 +3,17 @@ import Capacitor
 import GoogleMobileAds
 import PersonalizedAdConsent
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitor.ionicframework.com/docs/plugins/ios
- */
 @objc(AdmobAdvanced)
 public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDelegate, GADRewardedAdDelegate {
     var bannerView: GADBannerView!
     var interstitial: GADInterstitial!
     var rewardedAd: GADRewardedAd!
-    var personalizedAds: Bool = false
+    var personalizedAds: Bool!
     
     @objc func initialize(_ call: CAPPluginCall) {
         let appId = call.getString("appIdIos") ?? "ca-app-pub-6564742920318187~7217030993"
         GADMobileAds.sharedInstance().start(completionHandler: nil)
-        call.success([ "value": appId ])
+        call.success([ "value": true ])
     }
     
     @objc func initializeWithConsent(_ call: CAPPluginCall) {
@@ -33,17 +29,18 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
                     //Consent info update succeeded.
                     if PACConsentInformation.sharedInstance.isRequestLocationInEEAOrUnknown {
                         if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.unknown {
-                            NSLog("Unknown")
+                            self.personalizedAds = false
+                            call.success(["consentStatus": "UNKNOWN"])
                         } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.personalized {
-                            NSLog("personalized")
+                            self.personalizedAds = true
+                            call.success(["consentStatus": "PERSONALIZED"])
                         } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.nonPersonalized {
-                            NSLog("non-personalized")
+                            self.personalizedAds = false
+                            call.success(["consentStatus": "NON_PERSONALIZED"])
                         }
-                        
-                        call.success([ "consentStatus": PACConsentInformation.sharedInstance.consentStatus])
-                        
                     } else {
                         call.success(["consentStatus": "PERSONALIZED"])
+                        self.personalizedAds = true
                     }
                 }
             }
@@ -70,8 +67,16 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
                         } else if userPrefersAdFree {
                             call.success(["consentStatus": "ADFREE"])
                         } else {
-                            let status = PACConsentInformation.sharedInstance.consentStatus
-                            call.success(["consentStatus": status])
+                            if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.unknown {
+                                self.personalizedAds = false
+                                call.success(["consentStatus": "UNKNOWN"])
+                            } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.personalized {
+                                self.personalizedAds = true
+                                call.success(["consentStatus": "PERSONALIZED"])
+                            } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.nonPersonalized {
+                                self.personalizedAds = false
+                                call.success(["consentStatus": "NON_PERSONALIZED"])
+                            }
                         }
                     }
                 }
@@ -81,6 +86,17 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     
     @objc func updateAdExtras(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
+            let consentStatus = call.getString("consentStatus") ?? "UNKNOWN"
+            if consentStatus == "PERSONALIZED" {
+                self.personalizedAds = true
+                PACConsentInformation.sharedInstance.consentStatus = .personalized
+            } else if consentStatus == "NON_PERSONALIZED" {
+                self.personalizedAds = false
+                PACConsentInformation.sharedInstance.consentStatus = .nonPersonalized
+            } else {
+                self.personalizedAds = false
+                PACConsentInformation.sharedInstance.consentStatus = .unknown
+            }
             PACConsentInformation.sharedInstance.isTaggedForUnderAgeOfConsent = call.getBool("underAgeOfConsent") ?? false
             GADMobileAds.sharedInstance().requestConfiguration.tag(forChildDirectedTreatment: call.getBool("childDirected") ?? false)
             switch(call.getString("maxAdContentRating") ?? "MA") {
@@ -97,13 +113,31 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
                 GADMobileAds.sharedInstance().requestConfiguration.maxAdContentRating = GADMaxAdContentRating.matureAudience
                 break;
             }
+            if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.unknown {
+                call.success(["consentStatus": "UNKNOWN"])
+            } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.personalized {
+                self.personalizedAds = true
+                call.success(["consentStatus": "PERSONALIZED"])
+            } else if PACConsentInformation.sharedInstance.consentStatus == PACConsentStatus.nonPersonalized {
+                self.personalizedAds = false
+                call.success(["consentStatus": "NON_PERSONALIZED"])
+            }
         }
     }
     
     @objc func getAdProviders(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
-            let adProviders = PACConsentInformation.sharedInstance.adProviders
-            call.success(["adProviders": adProviders as Any])
+            let adProviders: [PACAdProvider] = PACConsentInformation.sharedInstance.adProviders!
+            var list = [[String: String]]()
+            for item in adProviders {
+                let object = [
+                    "id": item.identifier.stringValue,
+                    "name": item.name,
+                    "privacyPolicyURL": item.privacyPolicyURL.absoluteString
+                    ]
+                list.append(object)
+            }
+            call.success(["adProviders": list])
         }
     }
 
@@ -114,12 +148,10 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
             if (isTest) {
                 adId = "ca-app-pub-3940256099942544/6300978111";
             }
-
             let adSize = call.getString("adSize") ?? "SMART_BANNER"
             let adPosition = call.getString("position") ?? "BOTTOM_CENTER"
             let adMargin = call.getString("margin") ?? "0"
             var bannerSize = kGADAdSizeBanner
-
             switch (adSize) {
             case "BANNER":
                 bannerSize = kGADAdSizeBanner
@@ -300,9 +332,12 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     
     @objc func loadInterstitial(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
-            let adUnitID = call.getString("adId") ?? "ca-app-pub-3940256099942544/4411468910"
-            
-            self.interstitial = GADInterstitial(adUnitID: adUnitID)
+            var adId = call.getString("adIdIos") ?? "ca-app-pub-3940256099942544/4411468910"
+            let isTesting = call.getBool("isTesting") ?? false
+            if (isTesting) {
+                adId = "ca-app-pub-3940256099942544/4411468910";
+            }
+            self.interstitial = GADInterstitial(adUnitID: adId)
             self.interstitial.delegate = self
             if self.personalizedAds {
                 self.interstitial.load(GADRequest())
@@ -376,9 +411,12 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     
     @objc func loadRewarded(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
-            let adUnitID: String = call.getString("adId") ?? "ca-app-pub-3940256099942544/1712485313"
-            
-            self.rewardedAd = GADRewardedAd(adUnitID: adUnitID)
+            var adId: String = call.getString("adIdIos") ?? "ca-app-pub-3940256099942544/1712485313"
+            let isTesting = call.getBool("isTesting") ?? false
+            if (isTesting) {
+                adId = "ca-app-pub-3940256099942544/1712485313";
+            }
+            self.rewardedAd = GADRewardedAd(adUnitID: adId)
             if self.personalizedAds {
                 self.rewardedAd?.load(GADRequest()) { error in
                     if let error = error {
@@ -443,4 +481,5 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     }
 
 }
+
 

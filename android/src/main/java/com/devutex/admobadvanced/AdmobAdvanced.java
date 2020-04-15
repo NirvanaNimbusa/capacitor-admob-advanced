@@ -84,23 +84,21 @@ public class AdmobAdvanced extends Plugin {
         }catch (Exception ex) {
             call.error(ex.getLocalizedMessage(), ex);
         }
-        final boolean tfua = call.getBoolean("tagUnderAgeOfConsent", false);
         final ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
-        consentInformation.setTagForUnderAgeOfConsent(tfua);
         String[] publisherId = {call.getString("publisherId", "pub-0123456789012345")};
         consentInformation.requestConsentInfoUpdate(publisherId, new ConsentInfoUpdateListener() {
             @Override
             public void onConsentInfoUpdated(ConsentStatus consentStatus) {
                 // User's consent status successfully updated.
-
-                if(tfua) {
-                    call.success(new JSObject().put("consentStatus", "NON_PERSONALIZED"));
-                } else {
-                    if (ConsentInformation.getInstance(getContext()).isRequestLocationInEeaOrUnknown()) {
-                        call.success(new JSObject().put("consentStatus", consentStatus));
+                if (ConsentInformation.getInstance(getContext()).isRequestLocationInEeaOrUnknown()) {
+                    if (consentStatus == ConsentStatus.PERSONALIZED) {
+                        personalisedAds = true;
                     } else {
-                        call.success(new JSObject().put("consentStatus", "PERSONALIZED"));
+                        personalisedAds = false;
                     }
+                    call.success(new JSObject().put("consentStatus", consentStatus));
+                } else {
+                    call.success(new JSObject().put("consentStatus", "PERSONALIZED"));
                 }
             }
 
@@ -135,6 +133,11 @@ public class AdmobAdvanced extends Plugin {
                                     if (userPrefersAdFree) {
                                         call.success(new JSObject().put("consentStatus", "ADFREE"));
                                     } else {
+                                        if(consentStatus == ConsentStatus.PERSONALIZED) {
+                                            personalisedAds = true;
+                                        } else {
+                                            personalisedAds = false;
+                                        }
                                         call.success(new JSObject().put("consentStatus", consentStatus));
                                     }
                                 }
@@ -148,12 +151,7 @@ public class AdmobAdvanced extends Plugin {
                                 @Override
                                 public void onConsentFormLoaded() {
                                     // Consent form error.
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            form.show();
-                                        }
-                                    });
+                                    form.show();
                                 }
                             })
                             .withPersonalizedAdsOption()
@@ -167,6 +165,11 @@ public class AdmobAdvanced extends Plugin {
                                 @Override
                                 public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
                                     // Consent form was closed.
+                                    if(consentStatus == ConsentStatus.PERSONALIZED) {
+                                        personalisedAds = true;
+                                    } else {
+                                        personalisedAds = false;
+                                    }
                                     call.success(new JSObject().put("consentStatus", consentStatus));
                                 }
 
@@ -195,11 +198,16 @@ public class AdmobAdvanced extends Plugin {
     public void updateAdExtras(final PluginCall call){
         this.call = call;
         ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
-        personalisedAds = call.getBoolean("personalizedAds", false);
-        if(personalisedAds) {
+        String consentStatus = call.getString("consentStatus", "UNKNOWN");
+        if(consentStatus.equals("PERSONALIZED")) {
             consentInformation.setConsentStatus(ConsentStatus.PERSONALIZED);
-        } else {
+            personalisedAds = true;
+        } else if (consentStatus.equals("NON_PERSONALIZED")){
             consentInformation.setConsentStatus(ConsentStatus.NON_PERSONALIZED);
+            personalisedAds = false;
+        } else {
+            consentInformation.setConsentStatus(ConsentStatus.UNKNOWN);
+            personalisedAds = false;
         }
         int childDirected = call.getBoolean("childDirected", false) ? 1 : 0;
         int underAgeOfConsent = call.getBoolean("underAgeOfConsent", false) ? 1 : 0;
