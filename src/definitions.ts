@@ -20,7 +20,12 @@ export interface AdmobAdvancedPlugin {
         appIdAndroid: string,
         appIdIos: string,
         publisherId: string
-    }): Promise<{ consentStatus: string }>
+    }): Promise<{
+        consentStatus: string,
+        childDirected: any,
+        underAgeOfConsent: any,
+        maxAdContentRating: string
+    }>
 
     //Show the Google Consent Form
     showGoogleConsentForm(options: {
@@ -37,8 +42,8 @@ export interface AdmobAdvancedPlugin {
         maxAdContentRating: AdContentRating
     }): Promise<{
         consentStatus: string,
-        childDirected: boolean,
-        underAgeOfConsent: boolean,
+        childDirected: any,
+        underAgeOfConsent: any,
         maxAdContentRating: string
     }>
 

@@ -62,9 +62,8 @@ export class AdsService {
                 this.personalizedAds = false;
             } else if (data.consentStatus === 'UNKNOWN') {
                 this.showGoogleConsentForm();
-            } else {
-                console.log('Error: ' + data);
             }
+            console.log(data);
         }, error => {
             console.error(error);
         });

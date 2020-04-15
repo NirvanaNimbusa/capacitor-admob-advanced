@@ -3,7 +3,6 @@ package com.devutex.admobadvanced;
 import android.Manifest;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +33,6 @@ import com.google.ads.consent.ConsentInfoUpdateListener;
 import com.google.ads.consent.ConsentInformation;
 import com.google.ads.consent.ConsentStatus;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -59,7 +55,7 @@ public class AdmobAdvanced extends Plugin {
     private boolean personalisedAds = true;
     private ConsentForm form;
 
-    // Initialize Admob
+    // Initialize AdMob
     @PluginMethod()
     public void initialize(final PluginCall call) {
         this.call = call;
@@ -76,6 +72,7 @@ public class AdmobAdvanced extends Plugin {
     // Initialize AdMob with Consent SDK
     @PluginMethod()
     public void initializeWithConsent(final PluginCall call) {
+        final JSObject returnJson = new JSObject();
         this.call = call;
         String appId = call.getString("appIdAndroid", "ca-app-pub-3940256099942544~3347511713");
         try {
@@ -96,9 +93,11 @@ public class AdmobAdvanced extends Plugin {
                     } else {
                         personalisedAds = false;
                     }
-                    call.success(new JSObject().put("consentStatus", consentStatus));
+                    //call.success(new JSObject().put("consentStatus", consentStatus));
+                    returnJson.put("consentStatus", consentStatus);
                 } else {
-                    call.success(new JSObject().put("consentStatus", "PERSONALIZED"));
+                    //call.success(new JSObject().put("consentStatus", "PERSONALIZED"));
+                    returnJson.put("consentStatus", "PERSONALIZED");
                 }
             }
 
@@ -108,6 +107,23 @@ public class AdmobAdvanced extends Plugin {
                 call.error(errorDescription);
             }
         });
+        RequestConfiguration requestConfiguration = MobileAds.getRequestConfiguration();
+        if(requestConfiguration.getTagForChildDirectedTreatment() == RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE) {
+            returnJson.put("childDirected", true);
+        } else if (requestConfiguration.getTagForChildDirectedTreatment() == RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_FALSE){
+            returnJson.put("childDirected", false);
+        } else {
+            returnJson.put("childDirected", "UNSPECIFIED");
+        }
+        if(requestConfiguration.getTagForUnderAgeOfConsent() == RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE) {
+            returnJson.put("underAgeOfConsent", true);
+        } else if (requestConfiguration.getTagForUnderAgeOfConsent() == RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_FALSE){
+            returnJson.put("underAgeOfConsent", false);
+        } else {
+            returnJson.put("underAgeOfConsent", "UNSPECIFIED");
+        }
+        returnJson.put("maxAdContentRating", requestConfiguration.getMaxAdContentRating());
+        call.success(returnJson);
     }
 
     @PluginMethod()
@@ -220,18 +236,22 @@ public class AdmobAdvanced extends Plugin {
         MobileAds.setRequestConfiguration(requestConfiguration);
         JSObject json = new JSObject();
         json.put("consentStatus", consentInformation.getConsentStatus());
-        json.put("childDirected", intToBool(requestConfiguration.getTagForChildDirectedTreatment()));
-        json.put("underAgeOfConsent", intToBool(requestConfiguration.getTagForUnderAgeOfConsent()));
-        json.put("maxAdContentRating", requestConfiguration.getMaxAdContentRating());
-        call.success(new JSObject().put("consentStatus", consentInformation.getConsentStatus()));
-    }
-
-    public boolean intToBool (int value) {
-        if(value >= 1) {
-            return true;
+        if(requestConfiguration.getTagForChildDirectedTreatment() == RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE) {
+            json.put("childDirected", true);
+        } else if (requestConfiguration.getTagForChildDirectedTreatment() == RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_FALSE){
+            json.put("childDirected", false);
         } else {
-            return false;
+            json.put("childDirected", "UNSPECIFIED");
         }
+        if(requestConfiguration.getTagForUnderAgeOfConsent() == RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE) {
+            json.put("underAgeOfConsent", true);
+        } else if (requestConfiguration.getTagForUnderAgeOfConsent() == RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_FALSE){
+            json.put("underAgeOfConsent", false);
+        } else {
+            json.put("underAgeOfConsent", "UNSPECIFIED");
+        }
+        json.put("maxAdContentRating", requestConfiguration.getMaxAdContentRating());
+        call.success(json);
     }
 
     @PluginMethod()
