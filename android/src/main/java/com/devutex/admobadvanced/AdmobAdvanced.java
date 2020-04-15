@@ -218,7 +218,20 @@ public class AdmobAdvanced extends Plugin {
                 .setMaxAdContentRating(call.getString("maxAdContentRating", "MA"))
                 .build();
         MobileAds.setRequestConfiguration(requestConfiguration);
+        JSObject json = new JSObject();
+        json.put("consentStatus", consentInformation.getConsentStatus());
+        json.put("childDirected", intToBool(requestConfiguration.getTagForChildDirectedTreatment()));
+        json.put("underAgeOfConsent", intToBool(requestConfiguration.getTagForUnderAgeOfConsent()));
+        json.put("maxAdContentRating", requestConfiguration.getMaxAdContentRating());
         call.success(new JSObject().put("consentStatus", consentInformation.getConsentStatus()));
+    }
+
+    public boolean intToBool (int value) {
+        if(value >= 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @PluginMethod()

@@ -111,6 +111,7 @@ export class AdsService {
             } else {
                 this.personalizedAds = false;
             }
+            console.log(data);
         }, error => {
             console.error(error);
         });

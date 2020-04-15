@@ -35,7 +35,12 @@ export interface AdmobAdvancedPlugin {
         childDirected: boolean,
         underAgeOfConsent: boolean,
         maxAdContentRating: AdContentRating
-    }): Promise<{ value: boolean }>
+    }): Promise<{
+        consentStatus: string,
+        childDirected: boolean,
+        underAgeOfConsent: boolean,
+        maxAdContentRating: string
+    }>
 
     // Show a banner Ad
     showBanner(options: BannerAdOptions): Promise<{ value: boolean }>;
