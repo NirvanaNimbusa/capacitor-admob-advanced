@@ -199,14 +199,15 @@ public class AdmobAdvanced extends Plugin {
         this.call = call;
         ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
         String consentStatus = call.getString("consentStatus", "UNKNOWN");
-        if(consentStatus == "PERSONALIZED") {
+        if(consentStatus.equals("PERSONALIZED")) {
             consentInformation.setConsentStatus(ConsentStatus.PERSONALIZED);
             personalisedAds = true;
-        } else if (consentStatus == "NON_PERSONALIZED"){
+        } else if (consentStatus.equals("NON_PERSONALIZED")){
             consentInformation.setConsentStatus(ConsentStatus.NON_PERSONALIZED);
             personalisedAds = false;
         } else {
             consentInformation.setConsentStatus(ConsentStatus.UNKNOWN);
+            personalisedAds = false;
         }
         int childDirected = call.getBoolean("childDirected", false) ? 1 : 0;
         int underAgeOfConsent = call.getBoolean("underAgeOfConsent", false) ? 1 : 0;
