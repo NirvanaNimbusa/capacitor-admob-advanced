@@ -179,8 +179,9 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
                 adId = "ca-app-pub-3940256099942544/6300978111";
             }
             let adSize = call.getString("adSize") ?? "SMART_BANNER"
-            let adPosition = call.getString("position") ?? "BOTTOM_CENTER"
-            let adMargin = call.getString("margin") ?? "0"
+            let adPosition = call.getString("adPosition") ?? "BOTTOM"
+            let adBottomMargin = call.getInt("bottomMargin") ?? 0
+            let adTopMargin = call.getInt("topMargin") ?? 0
             var bannerSize = kGADAdSizeBanner
             switch (adSize) {
             case "BANNER":
@@ -207,7 +208,7 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
             }
 
             self.bannerView = GADBannerView(adSize: bannerSize)
-            self.addBannerViewToView(self.bannerView, adPosition, adMargin)
+            self.addBannerViewToView(self.bannerView, adPosition, adBottomMargin, adTopMargin)
             self.bannerView.translatesAutoresizingMaskIntoConstraints = false
             self.bannerView.adUnitID = adId
             self.bannerView.rootViewController = UIApplication.shared.keyWindow?.rootViewController
@@ -263,25 +264,24 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
         }
     }
 
-    private func addBannerViewToView(_ bannerView: GADBannerView, _ adPosition: String, _ Margin: String) {
+    private func addBannerViewToView(_ bannerView: GADBannerView, _ adPosition: String, _ bottomMargin: Int, _ topMargin: Int) {
         removeBannerViewToView()
         if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
             NSLog("AdMob: rendering rootView")
-            var toItem = rootViewController.bottomLayoutGuide
-            var adMargin = Int(Margin)!
-
+            var adBottomMargin = bottomMargin
+            let adTopMargin = topMargin
+            adBottomMargin = adBottomMargin * -1
+            var position: NSLayoutConstraint.Attribute = .bottom
             switch (adPosition) {
             case "TOP":
-                toItem = rootViewController.topLayoutGuide
+                position = .top
                 break;
             case "CENTER":
                 // todo: position center
-                toItem = rootViewController.bottomLayoutGuide
-                adMargin = adMargin * -1
+                position = .centerY
                 break;
             default:
-                toItem = rootViewController.bottomLayoutGuide
-                adMargin = adMargin * -1
+                position = .bottom
                 break;
             }
             bannerView.translatesAutoresizingMaskIntoConstraints = false
@@ -289,12 +289,12 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
             rootViewController.view.addSubview(bannerView)
             rootViewController.view.addConstraints(
                 [NSLayoutConstraint(item: bannerView,
-                                    attribute: .bottom,
+                                    attribute: position,
                                     relatedBy: .equal,
-                                    toItem: toItem,
-                                    attribute: .top,
+                                    toItem: rootViewController.view.safeAreaLayoutGuide,
+                                    attribute: position,
                                     multiplier: 1,
-                                    constant: CGFloat(adMargin)),
+                                    constant: CGFloat(adBottomMargin) + CGFloat(adTopMargin)),
                  NSLayoutConstraint(item: bannerView,
                                     attribute: .centerX,
                                     relatedBy: .equal,
@@ -511,6 +511,8 @@ public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     }
 
 }
+
+
 
 
 
