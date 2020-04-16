@@ -298,7 +298,6 @@ public loadInterstitial() {
 public showInterstitial() {
     AdmobAdvanced.showInterstitial().then(value => {
         console.log(value);
-        this.interstitialLoaded = false;
     }, error => {
         console.error(error);
     });
@@ -330,7 +329,6 @@ public rewardedOptions: RewardedAdOptions = {
 public loadRewarded() {
     AdmobAdvanced.loadRewarded(this.rewardedOptions).then(value => {
         console.log(value);
-        this.rewardedLoaded = true;
     }, error => {
         console.error(error);
     });
@@ -343,7 +341,6 @@ public loadRewarded() {
 public showRewarded() {
     AdmobAdvanced.showRewarded().then(value => {
         console.log(value);
-        this.rewardedLoaded = false;
     }, error => {
         console.error(error);
     });
