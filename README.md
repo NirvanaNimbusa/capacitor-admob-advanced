@@ -62,7 +62,7 @@ Open your **android/app/src/Android/AndroidManifest.xml** file and add the code 
 ```xml
 <application>
   <!-- this line needs to be added (replace the value!) -->
-  <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-3940256099942544~3347511713" />
+  <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-your-android-app-id" />
   <activity></activity>
 </application>
 
