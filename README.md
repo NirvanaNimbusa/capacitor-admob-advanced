@@ -49,7 +49,7 @@ Open your **App/App/Info.plist** file and add these lines. Make sure you replace
 
 <key>GADApplicationIdentifier</key>
 <!-- replace this value with your App ID key-->
-<string>ca-app-pub-6564742920318187~7217030993</string>
+<string>ca-app-pub-your-ios-app-id</string>
 
 ```
 
