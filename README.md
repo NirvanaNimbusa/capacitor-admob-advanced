@@ -21,8 +21,8 @@ I hope this plugin allows you to successfully monetize your mobile app while com
 
 | Type    | Link                                                                                             |
 | :------ | :----------------------------------------------------------------------------------------------- |
-| Once    | [paypal.me](paypal.me/elliotarcher)                                                     |
-| Monthly | [paypal.com]() |
+| Once    | [paypal.me](paypal.me/elliotarcher)                                                              |
+| Monthly | [paypal.com](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZMVSGXUDY4CHG) |
 
 ## Example App
 
