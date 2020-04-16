@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 <key>GADApplicationIdentifier</key>
-<string>ca-app-pub-3572449953921317~7887408669</string>
+<string>ca-app-pub-your-ios-app-id</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>

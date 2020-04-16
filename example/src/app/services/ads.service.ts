@@ -9,8 +9,8 @@ const { AdmobAdvanced } = Plugins;
 export class AdsService {
 
     public bannerOptions: BannerAdOptions = {
-        adIdAndroid: 'ca-app-pub-3940256099942544/6300978111',
-        adIdIos: 'ca-app-pub-3940256099942544/6300978111',
+        adIdAndroid: 'ca-app-pub-your-android-banner-ad-id',
+        adIdIos: 'ca-app-pub-your-ios-banner-ad-id',
         adSize: AdSize.SMART_BANNER,
         adPosition: AdPosition.BOTTOM,
         isTesting: true,
@@ -19,14 +19,14 @@ export class AdsService {
     };
 
     public interstitialOptions: InterstitialAdOptions = {
-        adIdAndroid: 'ca-app-pub-3940256099942544/6300978111',
-        adIdIos: 'ca-app-pub-3940256099942544/6300978111',
+        adIdAndroid: 'ca-app-pub-your-android-interstitial-ad-id',
+        adIdIos: 'ca-app-pub-your-ios-interstitial-ad-id',
         isTesting: true
     };
 
     public rewardedOptions: RewardedAdOptions = {
-        adIdAndroid: 'ca-app-pub-3940256099942544/6300978111',
-        adIdIos: 'ca-app-pub-3940256099942544/6300978111',
+        adIdAndroid: 'ca-app-pub-your-android-rewarded-video-ad-id',
+        adIdIos: 'ca-app-pub-your-ios-rewarded-video-ad-id',
         isTesting: true
     };
 
@@ -37,11 +37,9 @@ export class AdsService {
     constructor() { }
 
     public initialize() {
-        AdmobAdvanced.initializeWithConsent({
-            appIdAndroid: 'ca-app-pub-3572449953921317~8063185404', // replace with your actual Android app ID
-            appIdIos: 'ca-app-pub-3572449953921317~7887408669',     // replace with your actual iOS app ID
-            publisherId: 'pub-3572449953921317',                     // replace with your actual publisher ID
-            tagUnderAgeOfConsent: false
+        AdmobAdvanced.initialize({
+            appIdAndroid: 'ca-app-your-android-app-id', // replace with your actual Android app ID
+            appIdIos: 'ca-app-your-ios-add-id',     // replace with your actual iOS app ID
         }).then(value => {
             console.log(value);
         }, error => {
@@ -51,10 +49,9 @@ export class AdsService {
 
     public initializeWithConsent() {
         AdmobAdvanced.initializeWithConsent({
-            appIdAndroid: 'ca-app-pub-3572449953921317~8063185404', // replace with your actual Android app ID
-            appIdIos: 'ca-app-pub-3572449953921317~7887408669',     // replace with your actual iOS app ID
-            publisherId: 'pub-3572449953921317',                     // replace with your actual publisher ID
-            tagUnderAgeOfConsent: false
+            appIdAndroid: 'ca-app-your-android-app-id', // replace with your actual Android app ID
+            appIdIos: 'ca-app-your-ios-add-id',     // replace with your actual iOS app ID
+            publisherId: 'pub-your-publisher-id',                     // replace with your actual publisher ID
         }).then(data => {
             if (data.consentStatus === 'PERSONALIZED') {
                 this.personalizedAds = true;
