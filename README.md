@@ -21,8 +21,8 @@ I hope this plugin allows you to successfully monetize your mobile app while com
 
 | Type    | Link                                                                                             |
 | :------ | :----------------------------------------------------------------------------------------------- |
-| Once    | [paypal.me](paypal.me/elliotarcher)                                                     |
-| Monthly | [paypal.com]() |
+| Once    | [paypal.me](paypal.me/elliotarcher)                                                              |
+| Monthly | [paypal.com](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZMVSGXUDY4CHG) |
 
 ## Example App
 
@@ -49,7 +49,7 @@ Open your **App/App/Info.plist** file and add these lines. Make sure you replace
 
 <key>GADApplicationIdentifier</key>
 <!-- replace this value with your App ID key-->
-<string>ca-app-pub-6564742920318187~7217030993</string>
+<string>ca-app-pub-your-ios-app-id</string>
 
 ```
 
@@ -62,7 +62,7 @@ Open your **android/app/src/Android/AndroidManifest.xml** file and add the code 
 ```xml
 <application>
   <!-- this line needs to be added (replace the value!) -->
-  <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-3940256099942544~3347511713" />
+  <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-your-android-app-id" />
   <activity></activity>
 </application>
 
