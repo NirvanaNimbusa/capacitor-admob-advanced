@@ -76,7 +76,7 @@ Open your **android/app/src/main/java/your/package/name/MainActivity.java** of y
 
 ```java
 // Other imports...
-import com.devutex.admobadvanced.AdmobAdvanced;
+import com.devutex.admobadvanced.AdMobAdvanced;
 
 public class MainActivity extends BridgeActivity {
   @Override
@@ -85,7 +85,7 @@ public class MainActivity extends BridgeActivity {
 
     this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
 
-      add(AdmobAdvanced.class);  // Add AdMobAdvanced as a Capacitor Plugin
+      add(AdMobAdvanced.class);  // Add AdMobAdvanced as a Capacitor Plugin
 
     }});
   }
