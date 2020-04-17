@@ -2,11 +2,11 @@ import { PluginListenerHandle } from '@capacitor/core';
 
 declare global {
     interface PluginRegistry {
-        AdmobAdvanced: AdmobAdvancedPlugin;
+        AdMobAdvanced: AdMobAdvancedPlugin;
     }
 }
 
-export interface AdmobAdvancedPlugin {
+export interface AdMobAdvancedPlugin {
 
     // Initialize Admob
     initialize(options: {
