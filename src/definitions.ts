@@ -8,7 +8,7 @@ declare global {
 
 export interface AdMobAdvancedPlugin {
 
-    // Initialize Admob
+    // Initialize AdMob
     initialize(options: {
         appIdAndroid: string,
         appIdIos: string

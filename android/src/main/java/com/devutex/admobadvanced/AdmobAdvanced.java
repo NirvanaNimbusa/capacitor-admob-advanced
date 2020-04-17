@@ -49,7 +49,7 @@ import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_UNDER_AGE_
         Manifest.permission.INTERNET
     }
 )
-public class AdmobAdvanced extends Plugin {
+public class AdMobAdvanced extends Plugin {
 
     private PluginCall call;
     private ViewGroup viewGroup;

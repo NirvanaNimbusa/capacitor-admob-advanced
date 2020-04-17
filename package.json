@@ -1,50 +1,50 @@
 {
-  "name": "capacitor-admob-advanced",
-  "version": "1.0.2",
-  "description": "A capacitor plugin for iOS and Android to integrate Google Admob into your app with extra features.",
-  "main": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
-  "scripts": {
-    "build": "npm run clean && tsc",
-    "clean": "rimraf ./dist",
-    "watch": "tsc --watch",
-    "prepublishOnly": "npm run build"
-  },
-  "author": "DTX-Elliot",
-  "license": "MIT",
-  "dependencies": {
-    "@capacitor/core": "latest"
-  },
-  "devDependencies": {
-    "rimraf": "^3.0.0",
-    "typescript": "^3.2.4",
-    "@capacitor/ios": "latest",
-    "@capacitor/android": "latest"
-  },
-  "files": [
-    "dist/",
-    "ios/",
-    "android/",
-    "CapacitorAdmobAdvanced.podspec"
-  ],
-  "keywords": [
-    "capacitor",
-    "plugin",
-    "native"
-  ],
-  "capacitor": {
-    "ios": {
-      "src": "ios"
+    "name": "capacitor-admob-advanced",
+    "version": "1.0.2",
+    "description": "A capacitor plugin for iOS and Android to integrate Google Admob into your app with extra features.",
+    "main": "dist/esm/index.js",
+    "types": "dist/esm/index.d.ts",
+    "scripts": {
+        "build": "npm run clean && tsc",
+        "clean": "rimraf ./dist",
+        "watch": "tsc --watch",
+        "prepublishOnly": "npm run build"
     },
-    "android": {
-      "src": "android"
+    "author": "DTX-Elliot",
+    "license": "MIT",
+    "dependencies": {
+        "@capacitor/core": "latest"
+    },
+    "devDependencies": {
+        "rimraf": "^3.0.0",
+        "typescript": "^3.2.4",
+        "@capacitor/ios": "latest",
+        "@capacitor/android": "latest"
+    },
+    "files": [
+        "dist/",
+        "ios/",
+        "android/",
+        "CapacitorAdMobAdvanced.podspec"
+    ],
+    "keywords": [
+        "capacitor",
+        "plugin",
+        "native"
+    ],
+    "capacitor": {
+        "ios": {
+            "src": "ios"
+        },
+        "android": {
+            "src": "android"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DTX-Elliot/capacitor-admob-advanced"
+    },
+    "bugs": {
+        "url": "https://github.com/DTX-Elliot/capacitor-admob-advanced/issues"
     }
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/DTX-Elliot/capacitor-admob-advanced"
-  },
-  "bugs": {
-    "url": "https://github.com/DTX-Elliot/capacitor-admob-advanced/issues"
-  }
 }

@@ -3,8 +3,8 @@ import Capacitor
 import GoogleMobileAds
 import PersonalizedAdConsent
 
-@objc(AdmobAdvanced)
-public class AdmobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDelegate, GADRewardedAdDelegate {
+@objc(AdMobAdvanced)
+public class AdMobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDelegate, GADRewardedAdDelegate {
     var bannerView: GADBannerView!
     var interstitial: GADInterstitial!
     var rewardedAd: GADRewardedAd!
