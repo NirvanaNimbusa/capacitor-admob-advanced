@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { BannerAdOptions, InterstitialAdOptions, RewardedAdOptions, AdSize, AdPosition } from 'capacitor-admob-advanced';
-const { AdmobAdvanced } = Plugins;
+const { AdMobAdvanced } = Plugins;
 
 @Injectable({
     providedIn: 'root'
@@ -37,7 +37,7 @@ export class AdsService {
     constructor() { }
 
     public initialize() {
-        AdmobAdvanced.initialize({
+        AdMobAdvanced.initialize({
             appIdAndroid: 'ca-app-your-android-app-id', // replace with your actual Android app ID
             appIdIos: 'ca-app-your-ios-add-id',     // replace with your actual iOS app ID
         }).then(value => {
@@ -48,7 +48,7 @@ export class AdsService {
     }
 
     public initializeWithConsent() {
-        AdmobAdvanced.initializeWithConsent({
+        AdMobAdvanced.initializeWithConsent({
             appIdAndroid: 'ca-app-your-android-app-id', // replace with your actual Android app ID
             appIdIos: 'ca-app-your-ios-add-id',     // replace with your actual iOS app ID
             publisherId: 'pub-your-publisher-id',                     // replace with your actual publisher ID
@@ -67,7 +67,7 @@ export class AdsService {
     }
 
     public showGoogleConsentForm() {
-        AdmobAdvanced.showGoogleConsentForm({
+        AdMobAdvanced.showGoogleConsentForm({
             privacyPolicyURL: 'https://www.your.com/privacyurl', // replace with your actual privacy policy url
             showAdFreeOption: true
         }).then(data => {
@@ -87,7 +87,7 @@ export class AdsService {
     }
 
     public getAdProviders() {
-        AdmobAdvanced.getAdProviders({
+        AdMobAdvanced.getAdProviders({
         }).then(data => {
             console.log(data.adProviders);
         }, error => {
@@ -96,7 +96,7 @@ export class AdsService {
     }
 
     public updateAdExtras(conStat, chldDct, uAOC, mACR) {
-        AdmobAdvanced.updateAdExtras({
+        AdMobAdvanced.updateAdExtras({
             consentStatus: conStat,
             childDirected: chldDct,
             underAgeOfConsent: uAOC,
@@ -114,7 +114,7 @@ export class AdsService {
     }
 
     public showBanner() {
-        AdmobAdvanced.showBanner(this.bannerOptions).then(value => {
+        AdMobAdvanced.showBanner(this.bannerOptions).then(value => {
             console.log(value);
         }, error => {
             console.error(error);
@@ -122,7 +122,7 @@ export class AdsService {
     }
 
     public hideBanner() {
-        AdmobAdvanced.hideBanner().then(value => {
+        AdMobAdvanced.hideBanner().then(value => {
             console.log(value);
         }, error => {
             console.error(error);
@@ -130,7 +130,7 @@ export class AdsService {
     }
 
     public resumeBanner() {
-        AdmobAdvanced.resumeBanner().then(value => {
+        AdMobAdvanced.resumeBanner().then(value => {
             console.log(value);
         }, error => {
             console.error(error);
@@ -138,7 +138,7 @@ export class AdsService {
     }
 
     public removeBanner() {
-        AdmobAdvanced.removeBanner().then(value => {
+        AdMobAdvanced.removeBanner().then(value => {
             console.log(value);
         }, error => {
             console.error(error);
@@ -146,7 +146,7 @@ export class AdsService {
     }
 
     public loadInterstitial() {
-        AdmobAdvanced.loadInterstitial(this.interstitialOptions).then(value => {
+        AdMobAdvanced.loadInterstitial(this.interstitialOptions).then(value => {
             console.log(value);
             this.interstitialLoaded = true;
         }, error => {
@@ -155,7 +155,7 @@ export class AdsService {
     }
 
     public showInterstitial() {
-        AdmobAdvanced.showInterstitial().then(value => {
+        AdMobAdvanced.showInterstitial().then(value => {
             console.log(value);
             this.interstitialLoaded = false;
         }, error => {
@@ -164,7 +164,7 @@ export class AdsService {
     }
 
     public loadRewarded() {
-        AdmobAdvanced.loadRewarded(this.rewardedOptions).then(value => {
+        AdMobAdvanced.loadRewarded(this.rewardedOptions).then(value => {
             console.log(value);
             this.rewardedLoaded = true;
         }, error => {
@@ -173,7 +173,7 @@ export class AdsService {
     }
 
     public showRewarded() {
-        AdmobAdvanced.showRewarded().then(value => {
+        AdMobAdvanced.showRewarded().then(value => {
             console.log(value);
             this.rewardedLoaded = false;
         }, error => {
@@ -182,7 +182,7 @@ export class AdsService {
     }
 
     public pauseRewarded() {
-        AdmobAdvanced.pauseRewarded().then(value => {
+        AdMobAdvanced.pauseRewarded().then(value => {
             console.log(value);
         }, error => {
             console.error(error);
@@ -190,7 +190,7 @@ export class AdsService {
     }
 
     public resumeRewarded() {
-        AdmobAdvanced.resumeRewarded().then(value => {
+        AdMobAdvanced.resumeRewarded().then(value => {
             console.log(value);
         }, error => {
             console.error(error);
@@ -198,7 +198,7 @@ export class AdsService {
     }
 
     public stopRewarded() {
-        AdmobAdvanced.showRewarded().then(value => {
+        AdMobAdvanced.showRewarded().then(value => {
             console.log(value);
         }, error => {
             console.error(error);
