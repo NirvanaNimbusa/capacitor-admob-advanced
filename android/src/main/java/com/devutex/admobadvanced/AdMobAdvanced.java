@@ -153,6 +153,8 @@ public class AdMobAdvanced extends Plugin {
                                     if (userPrefersAdFree) {
                                         call.success(new JSObject().put("consentStatus", "ADFREE"));
                                     } else {
+                                        ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
+                                        consentInformation.setConsentStatus(consentStatus);
                                         if(consentStatus == ConsentStatus.PERSONALIZED) {
                                             personalisedAds = true;
                                         } else {
