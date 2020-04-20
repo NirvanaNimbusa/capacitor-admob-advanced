@@ -1,6 +1,6 @@
 
   Pod::Spec.new do |s|
-    s.name = 'CapacitorAdMobAdvanced'
+    s.name = 'CapacitorAdmobAdvanced'
     s.version = '1.2.3'
     s.summary = 'A capacitor plugin for iOS and Android to integrate Google Admob into your app with extra features.'
     s.license = 'MIT'
