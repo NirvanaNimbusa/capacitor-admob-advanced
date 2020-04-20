@@ -25,7 +25,7 @@
         "dist/",
         "ios/",
         "android/",
-        "CapacitorAdMobAdvanced.podspec"
+        "CapacitorAdmobAdvanced.podspec"
     ],
     "keywords": [
         "capacitor",
