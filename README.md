@@ -116,7 +116,7 @@ If you just want to use Google AdMob without utilising the Consent SDK then you 
 
 ```typescript
 public initialize() {
-    AdmobAdvanced.initialize({
+    AdMobAdvanced.initialize({
         appIdAndroid: 'ca-app-your-android-app-id',    // replace with your actual Android app ID
         appIdIos: 'ca-app-your-ios-add-id',            // replace with your actual iOS app ID
     }).then(value => {
@@ -131,7 +131,7 @@ public initialize() {
 If you want to take advantage of the Google Consent SDK, then you can initialize Google AdMob with the Consent functionality built in, see below. The plugin will return 4 values from the Consent SDK that may have been stored by you or from the user's preference. These values are: consentStatus, childDirected, underAgeOfConsent and maxAdContentRating. Again, Google doesn't need the iOS App Id value but I've put it in anyway.
 ```typescript
 public initializeWithConsent() {
-    AdmobAdvanced.initializeWithConsent({
+    AdMobAdvanced.initializeWithConsent({
         appIdAndroid: 'ca-app-your-android-app-id',    // replace with your actual Android app ID
         appIdIos: 'ca-app-your-ios-add-id',            // replace with your actual iOS app ID
         publisherId: 'pub-your-publisher-id'           // replace with your actual publisher ID
@@ -150,7 +150,7 @@ public initializeWithConsent() {
 You can either choose to collect consent information yourself and pass this information to the plugin or you can use the default Google Consent form for you. If your app has an Ad-free version (for example you allow users to pay to remove ads) then you can pass **showAdFreeOption: true** to the plugin and this option will be displayed on the form. If you don't have an Ad-free version then you don't need to pass this value, the default is false and the option won't be displayed to the user. You should also pass in the URL for your app's privacy policy so that it can be displayed on the google consent form. Once the form is complete, the plugin will return the consent status, or "ADFREE" if that is the users choice. The plugin will also save this value so that the user's preference is remembered when the app is relaunched. There is no need to forward this information to Google AdMob, this plugin does that automatically for you. 
 ```typescript
 public showGoogleConsentForm() {
-    AdmobAdvanced.showGoogleConsentForm({
+    AdMobAdvanced.showGoogleConsentForm({
         privacyPolicyURL: 'https://www.your.com/privacyurl', // replace with your actual privacy policy url
         showAdFreeOption: true
     }).then(data => {
@@ -172,7 +172,7 @@ public showGoogleConsentForm() {
 If you choose to collect consent information yourself then the plugin has 2 functions to help you set and save these preferences, as well as passing in extra ad parameters. Firstly, you can use **getAdProviders()** to return a list of Ad Providers enabled in your Google AdMob account. This is for you to display on your custom form so that the user can agree to have their data shared to all parties. Once you have collected consent yourself, or you wish to pass extra ad parameters, you can use **updateAdExtras()** to pass this data to the plugin to be set and stored. See below for an example.
 ```typescript
 public getAdProviders() {
-    AdmobAdvanced.getAdProviders({
+    AdMobAdvanced.getAdProviders({
     }).then(data => {
         console.log(data.adProviders);
     }, error => {
@@ -181,7 +181,7 @@ public getAdProviders() {
 }
 
 public updateAdExtras(conStat, chldDct, uAOC, mACR) {
-    AdmobAdvanced.updateAdExtras({
+    AdMobAdvanced.updateAdExtras({
         consentStatus: AdConsentStatus.PERSONALIZED,
         childDirected: AdChildDirected.FALSE,
         underAgeOfConsent: AdUnderAge.FALSE,
@@ -214,7 +214,7 @@ public bannerOptions: BannerAdOptions = {
 };
 
 public showBanner() {
-    AdmobAdvanced.showBanner(this.bannerOptions).then(value => {
+    AdMobAdvanced.showBanner(this.bannerOptions).then(value => {
         console.log(value);
     }, error => {
         console.error(error);
@@ -228,7 +228,7 @@ This will hide the banner from view, but will not remove its instance.
 
 ```typescript
 public hideBanner() {
-    AdmobAdvanced.hideBanner().then(value => {
+    AdMobAdvanced.hideBanner().then(value => {
         console.log(value);
     }, error => {
         console.error(error);
@@ -241,7 +241,7 @@ This will un-hide a previously hidden banner.
 
 ```typescript
 public resumeBanner() {
-    AdmobAdvanced.resumeBanner().then(value => {
+    AdMobAdvanced.resumeBanner().then(value => {
         console.log(value);
     }, error => {
         console.error(error);
@@ -254,7 +254,7 @@ This will remove the banner completely.
 
 ```typescript
 public removeBanner() {
-    AdmobAdvanced.removeBanner().then(value => {
+    AdMobAdvanced.removeBanner().then(value => {
         console.log(value);
     }, error => {
         console.error(error);
@@ -284,7 +284,7 @@ public interstitialOptions: InterstitialAdOptions = {
 };
 
 public loadInterstitial() {
-    AdmobAdvanced.loadInterstitial(this.interstitialOptions).then(value => {
+    AdMobAdvanced.loadInterstitial(this.interstitialOptions).then(value => {
         console.log(value);
     }, error => {
         console.error(error);
@@ -296,7 +296,7 @@ public loadInterstitial() {
 
 ```typescript
 public showInterstitial() {
-    AdmobAdvanced.showInterstitial().then(value => {
+    AdMobAdvanced.showInterstitial().then(value => {
         console.log(value);
     }, error => {
         console.error(error);
@@ -327,7 +327,7 @@ public rewardedOptions: RewardedAdOptions = {
 };
 
 public loadRewarded() {
-    AdmobAdvanced.loadRewarded(this.rewardedOptions).then(value => {
+    AdMobAdvanced.loadRewarded(this.rewardedOptions).then(value => {
         console.log(value);
     }, error => {
         console.error(error);
@@ -339,7 +339,7 @@ public loadRewarded() {
 
 ```typescript
 public showRewarded() {
-    AdmobAdvanced.showRewarded().then(value => {
+    AdMobAdvanced.showRewarded().then(value => {
         console.log(value);
     }, error => {
         console.error(error);
@@ -351,7 +351,7 @@ public showRewarded() {
 
 ```typescript
 public pauseRewarded() {
-    AdmobAdvanced.pauseRewarded().then(value => {
+    AdMobAdvanced.pauseRewarded().then(value => {
         console.log(value);
     }, error => {
         console.error(error);
@@ -363,7 +363,7 @@ public pauseRewarded() {
 
 ```typescript
 public resumeRewarded() {
-    AdmobAdvanced.resumeRewarded().then(value => {
+    AdMobAdvanced.resumeRewarded().then(value => {
         console.log(value);
     }, error => {
         console.error(error);
@@ -375,7 +375,7 @@ public resumeRewarded() {
 
 ```typescript
 public stopRewarded() {
-    AdmobAdvanced.showRewarded().then(value => {
+    AdMobAdvanced.showRewarded().then(value => {
         console.log(value);
     }, error => {
         console.error(error);
