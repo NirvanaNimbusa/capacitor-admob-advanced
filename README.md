@@ -9,6 +9,8 @@
 Capacitor AdMob Advanced is an [Ionic Capacitor](https://capacitor.ionicframework.com) plugin that allows you to use the Google AdMob and Google Consent SDK within your Ionic project. This plugin supports both iOS and Android.
 
 ## Release Notes:
+### [v1.4.0](https://github.com/DTX-Elliot/capacitor-admob-advanced)
+- Rolled to minor version
 ### [v1.3.2](https://github.com/DTX-Elliot/capacitor-admob-advanced)
 - Fixed app crashing on startup on iOS
 ### [v1.3.0](https://github.com/DTX-Elliot/capacitor-admob-advanced)
