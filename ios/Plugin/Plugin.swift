@@ -212,7 +212,7 @@ public class AdMobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
             self.bannerView.translatesAutoresizingMaskIntoConstraints = false
             self.bannerView.adUnitID = adId
             self.bannerView.rootViewController = UIApplication.shared.keyWindow?.rootViewController
-            if self.personalizedAds {
+            if self.personalizedAds == true {
                 self.bannerView.load(GADRequest())
             } else {
                 let request = GADRequest()
@@ -369,7 +369,7 @@ public class AdMobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
             }
             self.interstitial = GADInterstitial(adUnitID: adId)
             self.interstitial.delegate = self
-            if self.personalizedAds {
+            if self.personalizedAds == true{
                 self.interstitial.load(GADRequest())
             } else {
                 let request = GADRequest()
@@ -447,7 +447,7 @@ public class AdMobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
                 adId = "ca-app-pub-3940256099942544/1712485313";
             }
             self.rewardedAd = GADRewardedAd(adUnitID: adId)
-            if self.personalizedAds {
+            if self.personalizedAds == true{
                 self.rewardedAd?.load(GADRequest()) { error in
                     if let error = error {
                       print("Loading failed: \(error)")
