@@ -80,12 +80,18 @@ export interface AdMobAdvancedPlugin {
     stopRewarded(): Promise<{ value: boolean }>;
 
 
-    // AdMob listeners
-    addListener(eventName: 'onAdLoaded', listenerFunc: (info: any) => void): PluginListenerHandle;
-    addListener(eventName: 'onAdFailedToLoad', listenerFunc: (info: any) => void): PluginListenerHandle;
-    addListener(eventName: 'onAdOpened', listenerFunc: (info: any) => void): PluginListenerHandle;
-    addListener(eventName: 'onAdClosed', listenerFunc: (info: any) => void): PluginListenerHandle;
-    addListener(eventName: 'onAdLeftApplication', listenerFunc: (info: any) => void): PluginListenerHandle;
+    // AdMob Banner listeners
+    addListener(eventName: 'onBannerAdLoaded', listenerFunc: (info: any) => void): PluginListenerHandle;
+    addListener(eventName: 'onBannerAdFailedToLoad', listenerFunc: (info: any) => void): PluginListenerHandle;
+    addListener(eventName: 'onBannerAdOpened', listenerFunc: (info: any) => void): PluginListenerHandle;
+    addListener(eventName: 'onBannerAdClosed', listenerFunc: (info: any) => void): PluginListenerHandle;
+
+    // AdMob Interstitial listeners
+    addListener(eventName: 'onInterAdLoaded', listenerFunc: (info: any) => void): PluginListenerHandle;
+    addListener(eventName: 'onInterAdFailedToLoad', listenerFunc: (info: any) => void): PluginListenerHandle;
+    addListener(eventName: 'onInterAdOpened', listenerFunc: (info: any) => void): PluginListenerHandle;
+    addListener(eventName: 'onInterAdClosed', listenerFunc: (info: any) => void): PluginListenerHandle;
+    addListener(eventName: 'onInterAdLeftApplication', listenerFunc: (info: any) => void): PluginListenerHandle;
 
     // Admob Rewarded Video listeners
     addListener(eventName: 'onRewardedVideoAdLoaded', listenerFunc: (info: any) => void): PluginListenerHandle;

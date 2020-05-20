@@ -9,6 +9,8 @@
 Capacitor AdMob Advanced is an [Ionic Capacitor](https://capacitor.ionicframework.com) plugin that allows you to use the Google AdMob and Google Consent SDK within your Ionic project. This plugin supports both iOS and Android.
 
 ## Release Notes:
+### [v1.4.1](https://github.com/DTX-Elliot/capacitor-admob-advanced)
+- Updated event listener names to avoid ambiguity 
 ### [v1.4.0](https://github.com/DTX-Elliot/capacitor-admob-advanced)
 - Rolled to minor version
 ### [v1.3.2](https://github.com/DTX-Elliot/capacitor-admob-advanced)
@@ -271,10 +273,10 @@ public removeBanner() {
 This following Event Listeners can be called for **Banner Ads**.
 
 ```typescript
-addListener(eventName: 'onAdLoaded', listenerFunc: (info: any) => void): PluginListenerHandle;
-addListener(eventName: 'onAdFailedToLoad', listenerFunc: (info: any) => void): PluginListenerHandle;
-addListener(eventName: 'onAdOpened', listenerFunc: (info: any) => void): PluginListenerHandle;
-addListener(eventName: 'onAdClosed', listenerFunc: (info: any) => void): PluginListenerHandle;
+addListener(eventName: 'onBannerAdLoaded', listenerFunc: (info: any) => void): PluginListenerHandle;
+addListener(eventName: 'onBannerAdFailedToLoad', listenerFunc: (info: any) => void): PluginListenerHandle;
+addListener(eventName: 'onBannerAdOpened', listenerFunc: (info: any) => void): PluginListenerHandle;
+addListener(eventName: 'onBannerAdClosed', listenerFunc: (info: any) => void): PluginListenerHandle;
 ```
 
 ## Interstitial Ads
@@ -313,11 +315,11 @@ public showInterstitial() {
 This following Event Listeners can be called for **Interstitial Ads**
 
 ```typescript
-addListener(eventName: 'onAdLoaded', listenerFunc: (info: any) => void): PluginListenerHandle;
-addListener(eventName: 'onAdFailedToLoad', listenerFunc: (info: any) => void): PluginListenerHandle;
-addListener(eventName: 'onAdOpened', listenerFunc: (info: any) => void): PluginListenerHandle;
-addListener(eventName: 'onAdClosed', listenerFunc: (info: any) => void): PluginListenerHandle;
-addListener(eventName: 'onAdLeftApplication', listenerFunc: (info: any) => void): PluginListenerHandle;
+addListener(eventName: 'onInterAdLoaded', listenerFunc: (info: any) => void): PluginListenerHandle;
+addListener(eventName: 'onInterAdFailedToLoad', listenerFunc: (info: any) => void): PluginListenerHandle;
+addListener(eventName: 'onInterAdOpened', listenerFunc: (info: any) => void): PluginListenerHandle;
+addListener(eventName: 'onInterAdClosed', listenerFunc: (info: any) => void): PluginListenerHandle;
+addListener(eventName: 'onInterAdLeftApplication', listenerFunc: (info: any) => void): PluginListenerHandle;
 ```
 
 ## RewardVideo

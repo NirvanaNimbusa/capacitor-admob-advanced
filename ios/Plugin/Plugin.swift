@@ -319,14 +319,14 @@ public class AdMobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     /// Tells the delegate an ad request loaded an ad.
     public func adViewDidReceiveAd(_ bannerView: GADBannerView) {
         print("adViewDidReceiveAd")
-        self.notifyListeners("onAdLoaded", data: ["value": true])
+        self.notifyListeners("onBannerAdLoaded", data: ["value": true])
     }
 
     /// Tells the delegate an ad request failed.
     public func adView(_ bannerView: GADBannerView,
                 didFailToReceiveAdWithError error: GADRequestError) {
         print("adView:didFailToReceiveAdWithError: \(error.localizedDescription)")
-        self.notifyListeners("onAdFailedToLoad", data: ["error": error.localizedDescription])
+        self.notifyListeners("onBannerAdFailedToLoad", data: ["error": error.localizedDescription])
     }
 
     /// Tells the delegate that a full-screen view will be presented in response
@@ -345,14 +345,14 @@ public class AdMobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     /// Tells the delegate that the full-screen view has been dismissed.
     public func adViewDidDismissScreen(_ bannerView: GADBannerView) {
         print("adViewDidDismissScreen")
-        self.notifyListeners("onAdClosed", data: ["value": true])
+        self.notifyListeners("onBannerAdClosed", data: ["value": true])
     }
 
     /// Tells the delegate that a user click will open another app (such as
     /// the App Store), backgrounding the current app.
     public func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
         print("adViewWillLeaveApplication")
-        self.notifyListeners("onAdLeftApplication", data: ["value": true])
+        self.notifyListeners("onBannerAdLeftApplication", data: ["value": true])
     }
     
     
@@ -402,19 +402,19 @@ public class AdMobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     /// Tells the delegate an ad request succeeded.
     public func interstitialDidReceiveAd(_ ad: GADInterstitial) {
         print("interstitialDidReceiveAd")
-        self.notifyListeners("onAdLoaded", data: ["value": true])
+        self.notifyListeners("onInterAdLoaded", data: ["value": true])
     }
 
     /// Tells the delegate an ad request failed.
     public func interstitial(_ ad: GADInterstitial, didFailToReceiveAdWithError error: GADRequestError) {
         print("interstitial:didFailToReceiveAdWithError: \(error.localizedDescription)")
-        self.notifyListeners("onAdFailedToLoad", data: ["error": error.localizedDescription])
+        self.notifyListeners("onInterAdFailedToLoad", data: ["error": error.localizedDescription])
     }
 
     /// Tells the delegate that an interstitial will be presented.
     public func interstitialWillPresentScreen(_ ad: GADInterstitial) {
         print("interstitialWillPresentScreen")
-        self.notifyListeners("onAdOpened", data: ["value": true])
+        self.notifyListeners("onInterAdOpened", data: ["value": true])
     }
 
     /// Tells the delegate the interstitial is to be animated off the screen.
@@ -425,14 +425,14 @@ public class AdMobAdvanced: CAPPlugin, GADBannerViewDelegate, GADInterstitialDel
     /// Tells the delegate the interstitial had been animated off the screen.
     public func interstitialDidDismissScreen(_ ad: GADInterstitial) {
         print("interstitialDidDismissScreen")
-        self.notifyListeners("onAdClosed", data: ["value": true])
+        self.notifyListeners("onInterAdClosed", data: ["value": true])
     }
 
     /// Tells the delegate that a user click will open another app
     /// (such as the App Store), backgrounding the current app.
     public func interstitialWillLeaveApplication(_ ad: GADInterstitial) {
         print("interstitialWillLeaveApplication")
-        self.notifyListeners("onAdLeftApplication", data: ["value": true])
+        self.notifyListeners("onInterAdLeftApplication", data: ["value": true])
     }
     
     

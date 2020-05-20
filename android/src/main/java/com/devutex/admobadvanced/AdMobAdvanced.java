@@ -394,25 +394,25 @@ public class AdMobAdvanced extends Plugin {
                     adView.setAdListener(new AdListener(){
                         @Override
                         public void onAdLoaded() {
-                            notifyListeners("onAdLoaded", new JSObject().put("value", true));
+                            notifyListeners("onBannerAdLoaded", new JSObject().put("value", true));
                             super.onAdLoaded();
                         }
 
                         @Override
                         public void onAdFailedToLoad(int i) {
-                            notifyListeners("onAdFailedToLoad", new JSObject().put("errorCode", i));
+                            notifyListeners("onBannerAdFailedToLoad", new JSObject().put("errorCode", i));
                             super.onAdFailedToLoad(i);
                         }
 
                         @Override
                         public void onAdOpened() {
-                            notifyListeners("onAdOpened", new JSObject().put("value", true));
+                            notifyListeners("onBannerAdOpened", new JSObject().put("value", true));
                             super.onAdOpened();
                         }
 
                         @Override
                         public void onAdClosed() {
-                            notifyListeners("onAdClosed", new JSObject().put("value", true));
+                            notifyListeners("onBannerAdClosed", new JSObject().put("value", true));
                             super.onAdClosed();
                         }
                     });
@@ -519,7 +519,7 @@ public class AdMobAdvanced extends Plugin {
                         @Override
                         public void onAdLoaded() {
                             // Code to be executed when an ad finishes loading.
-                            notifyListeners("onAdLoaded", new JSObject().put("value", true));
+                            notifyListeners("onInterAdLoaded", new JSObject().put("value", true));
                             call.success(new JSObject().put("value", true));
                             super.onAdLoaded();
                         }
@@ -527,28 +527,28 @@ public class AdMobAdvanced extends Plugin {
                         @Override
                         public void onAdFailedToLoad(int errorCode) {
                             // Code to be executed when an ad request fails.
-                            notifyListeners("onAdFailedToLoad", new JSObject().put("errorCode", errorCode));
+                            notifyListeners("onInterAdFailedToLoad", new JSObject().put("errorCode", errorCode));
                             super.onAdFailedToLoad(errorCode);
                         }
 
                         @Override
                         public void onAdOpened() {
                             // Code to be executed when the ad is displayed.
-                            notifyListeners("onAdOpened", new JSObject().put("value", true));
+                            notifyListeners("onInterAdOpened", new JSObject().put("value", true));
                             super.onAdOpened();
                         }
 
                         @Override
                         public void onAdLeftApplication() {
                             // Code to be executed when the user has left the app.
-                            notifyListeners("onAdLeftApplication", new JSObject().put("value", true));
+                            notifyListeners("onInterAdLeftApplication", new JSObject().put("value", true));
                             super.onAdLeftApplication();
                         }
 
                         @Override
                         public void onAdClosed() {
                             // Code to be executed when when the interstitial ad is closed.
-                            notifyListeners("onAdClosed", new JSObject().put("value", true));
+                            notifyListeners("onInterAdClosed", new JSObject().put("value", true));
                             super.onAdClosed();
                         }
                     });
