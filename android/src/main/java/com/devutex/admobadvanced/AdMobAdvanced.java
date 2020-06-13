@@ -395,12 +395,22 @@ public class AdMobAdvanced extends Plugin {
                         @Override
                         public void onAdLoaded() {
                             notifyListeners("onBannerAdLoaded", new JSObject().put("value", true));
+                            JSObject ret = new JSObject();
+                            ret.put("width", adView.getAdSize().getWidth());
+                            ret.put("height", adView.getAdSize().getHeight());
+                            notifyListeners("onAdSize", ret);
                             super.onAdLoaded();
                         }
 
                         @Override
                         public void onAdFailedToLoad(int i) {
                             notifyListeners("onBannerAdFailedToLoad", new JSObject().put("errorCode", i));
+                            
+                            JSObject ret = new JSObject();
+                            ret.put("width", 0);
+                            ret.put("height", 0);
+                            notifyListeners("onAdSize", ret);
+                            
                             super.onAdFailedToLoad(i);
                         }
 
