@@ -79,7 +79,9 @@ export interface AdMobAdvancedPlugin {
     // Close RewardedVideo
     stopRewarded(): Promise<{ value: boolean }>;
 
-
+    // AdMob Banner Adsize listeners
+    addListener(eventName: 'onAdSize', listenerFunc: (info: any) => void): PluginListenerHandle;
+    
     // AdMob Banner listeners
     addListener(eventName: 'onBannerAdLoaded', listenerFunc: (info: any) => void): PluginListenerHandle;
     addListener(eventName: 'onBannerAdFailedToLoad', listenerFunc: (info: any) => void): PluginListenerHandle;
